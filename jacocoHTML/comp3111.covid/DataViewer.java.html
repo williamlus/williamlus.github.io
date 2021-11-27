@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataViewer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">DataViewer.java</span></div><h1>DataViewer.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+/** A class to visualize graphs.
+ * */
+<span class="nc" id="L12">public class DataViewer {</span>
+	
+	public static void viewTable(Node table) {
+<span class="nc" id="L15">		Stage stage = new Stage();</span>
+<span class="nc" id="L16">        VBox vbox = new VBox();</span>
+<span class="nc" id="L17">        vbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L18">        vbox.getChildren().addAll(table);</span>
+<span class="nc" id="L19">        Scene scene = new Scene(vbox);</span>
+<span class="nc" id="L20">        stage.setScene(scene);</span>
+<span class="nc" id="L21">        stage.show();</span>
+<span class="nc" id="L22">	}</span>
+	
+	public static void viewChart(Node chart) {
+<span class="nc" id="L25">		Stage stage = new Stage();</span>
+<span class="nc" id="L26">        VBox vbox = new VBox();</span>
+<span class="nc" id="L27">        vbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L28">        vbox.getChildren().addAll(chart);</span>
+<span class="nc" id="L29">        Scene scene = new Scene(vbox);</span>
+<span class="nc" id="L30">        stage.setScene(scene);</span>
+<span class="nc" id="L31">        stage.show();</span>
+<span class="nc" id="L32">	}</span>
+	
+	public static void viewPieChart(Node chart1,Node chart2) {
+<span class="nc" id="L35">		Stage stage = new Stage();</span>
+<span class="nc" id="L36">		HBox hbox=new HBox(chart1, chart2);</span>
+<span class="nc" id="L37">		hbox.setSpacing(10);</span>
+<span class="nc" id="L38">        Scene scene = new Scene(hbox);</span>
+<span class="nc" id="L39">        stage.setScene(scene);</span>
+<span class="nc" id="L40">        stage.show();</span>
+<span class="nc" id="L41">	}</span>
+	
+	public static void viewBarChart(Node chart1,Node chart2) {
+<span class="nc" id="L44">		Stage stage = new Stage();</span>
+<span class="nc" id="L45">        VBox vbox = new VBox();</span>
+<span class="nc" id="L46">        vbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L47">        vbox.getChildren().addAll(chart1,chart2);</span>
+<span class="nc" id="L48">        vbox.autosize();</span>
+<span class="nc" id="L49">        Scene scene = new Scene(vbox);</span>
+<span class="nc" id="L50">        stage.setScene(scene);</span>
+<span class="nc" id="L51">        stage.show();</span>
+<span class="nc" id="L52">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
