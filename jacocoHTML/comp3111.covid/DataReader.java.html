@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">deCOVID</a> &gt; <a href="index.source.html" class="el_package">comp3111.covid</a> &gt; <span class="el_source">DataReader.java</span></div><h1>DataReader.java</h1><pre class="source lang-java linenums">package comp3111.covid;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+
+/** A class to load and process the data set.
+ * @author LU, Weiqi
+ * */
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">public class DataReader {</span>
+<span class="fc" id="L21">	private static String dataset=null;</span>
+<span class="fc" id="L22">	private static Record[] records=null;</span>
+<span class="fc" id="L23">	private static String[] sortRule=null;</span>
+<span class="fc" id="L24">	private static Map&lt;String,List&lt;String&gt;&gt; countryOfContinent=new HashMap&lt;&gt;(); // Map continent to country list, map empty String to list of continents and world.</span>
+<span class="fc" id="L25">	private static SimpleDateFormat sdf=new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
+	
+	/** Read the data set into buffer, sort the records by location and then date in default. */
+	public static int readData(String dataset, boolean isSorted) throws Exception {
+		
+		/* Initialization */
+<span class="pc bpc" id="L31" title="2 of 4 branches missed.">		if(dataset==null || dataset.length()==0) throw new Exception(&quot;Dataset name is empty!&quot;);</span>
+		
+		/* Read the data set to records */
+<span class="fc" id="L34">		System.out.println(&quot;Start reading data from &quot;+dataset);</span>
+<span class="fc" id="L35">		FileResource fr = new FileResource(&quot;dataset/&quot; + dataset);</span>
+<span class="fc" id="L36">		CSVParser parser = fr.getCSVParser(false);</span>
+<span class="fc" id="L37">		ArrayList&lt;String&gt; names=new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L38">		ArrayList&lt;Record&gt; recs=new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">		int count=0;</span>
+<span class="fc" id="L40">		String[] temp=null;</span>
+<span class="fc" id="L41">		Map&lt;String,List&lt;String&gt;&gt; countryMap=new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		for (CSVRecord rec : parser) {</span>
+			/* set attributeNames of Record by the header of the data set */
+<span class="fc bfc" id="L44" title="All 2 branches covered.">			if(count==0) {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">				for(int i=0;i&lt;rec.size();i++) {</span>
+<span class="fc" id="L46">					names.add(rec.get(i));</span>
+				}
+				
+<span class="fc" id="L49">				System.out.println(&quot;Attribute names: &quot;);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">				for(String s:names) System.out.print(s+&quot; &quot;);</span>
+<span class="fc" id="L51">				System.out.println();</span>
+<span class="fc" id="L52">				Record.setAttributeNames(names.toArray(new String[0]));</span>
+<span class="fc" id="L53">				temp=new String[names.size()];</span>
+			}
+			/* read the record */
+			else {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">				for(int i=0;i&lt;rec.size();i++) {</span>
+<span class="fc" id="L58">					temp[i]=rec.get(i);</span>
+				}
+<span class="fc" id="L60">				Record record=new Record(temp.clone());</span>
+<span class="fc" id="L61">				recs.add(record);</span>
+<span class="fc" id="L62">				addCountry(record,countryMap);</span>
+			}
+<span class="fc" id="L64">			count++;</span>
+<span class="fc" id="L65">		}</span>
+<span class="fc" id="L66">		System.out.println(&quot;Total records: &quot;+(count-1));</span>
+<span class="fc" id="L67">		Record[] recsArr=recs.toArray(new Record[0]);</span>
+		
+<span class="fc" id="L69">		parser.close();</span>
+<span class="fc" id="L70">		System.out.println(&quot;Parser closed.&quot;);</span>
+		
+<span class="pc bpc" id="L72" title="6 of 12 branches missed.">		assert(recsArr.length&gt;0 &amp;&amp; recsArr[0]!=null &amp;&amp; recsArr[0].toString().length()!=0 &amp;&amp; recsArr[0].get(&quot;location&quot;)!=null &amp;&amp; recsArr[0].get(&quot;date&quot;)!=null);</span>
+		
+<span class="fc" id="L74">		System.out.println(&quot;The first record: \n&quot;+recsArr[0].toString());</span>
+<span class="fc" id="L75">		System.out.println(&quot;Load data success!&quot;);</span>
+		
+		/* Overwrite the buffer */
+<span class="fc" id="L78">		DataReader.dataset=dataset;</span>
+<span class="fc" id="L79">		records=recsArr;</span>
+<span class="fc" id="L80">		sortRule=null;</span>
+<span class="fc" id="L81">		countryOfContinent=countryMap;</span>
+		
+		/* Sort the records by location and date */
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		if(isSorted==false)</span>
+<span class="fc" id="L85">			sortByLocationDate();</span>
+		else
+<span class="fc" id="L87">			sortRule=new String[] {&quot;location&quot;,&quot;date&quot;};</span>
+		
+<span class="fc" id="L89">		return 0;</span>
+	}
+	
+	/** Add country to countryOfContinent. */
+	private static void addCountry(Record rec, Map&lt;String,List&lt;String&gt;&gt; countryMap) {
+<span class="fc" id="L94">		String continent=rec.get(&quot;continent&quot;);</span>
+<span class="fc" id="L95">		String location=rec.get(&quot;location&quot;);</span>
+<span class="fc" id="L96">		List&lt;String&gt; locations=countryMap.get(continent);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">		if(locations==null) {</span>
+<span class="fc" id="L98">			ArrayList&lt;String&gt; temp=new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L99">			temp.add(location);</span>
+<span class="fc" id="L100">			countryMap.put(continent, temp);</span>
+<span class="fc" id="L101">		}</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		else if(locations.contains(location)==false) {</span>
+<span class="fc" id="L103">			locations.add(location);</span>
+		}
+<span class="fc" id="L105">	}</span>
+	
+	/** Get the data set name. */
+	public static String getDatasetName() {
+<span class="fc" id="L109">		return dataset;</span>
+	}
+	
+	/** Get the records of the data set. */
+	public static Record[] getRecords() {
+<span class="fc" id="L114">		return records;</span>
+	}
+	
+	/** Get the record by index. */
+	public static Record getRecord(int index) {
+<span class="pc bpc" id="L119" title="3 of 6 branches missed.">		assert(index&gt;=0 &amp;&amp; index&lt;records.length);</span>
+<span class="fc" id="L120">		return records[index];</span>
+	}
+	
+	/** Get the number of records of the data set. */
+	public static int getSize() {
+<span class="fc" id="L125">		return records.length;</span>
+	}
+	
+	/** Return the rules that have been applied to sort the records. */
+	public static String[] getSortedRule() {
+<span class="fc" id="L130">		return sortRule;</span>
+	}
+	
+	/** Get all continents reported (as a whole) in records */
+	public static String[] getReportedContinents() {
+<span class="fc" id="L135">		return countryOfContinent.get(&quot;&quot;).toArray(new String[0]);</span>
+	}
+	
+	/** Get all countries with or without continents */
+	public static String[] getCountries(boolean withContinents) {
+<span class="fc" id="L140">		List&lt;String&gt; countries=new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">		for(String continent:countryOfContinent.keySet()) {</span>
+<span class="fc bfc" id="L142" title="All 4 branches covered.">			if(continent.isEmpty() &amp;&amp; !withContinents) continue;</span>
+<span class="fc" id="L143">			countries.addAll(countryOfContinent.get(continent));</span>
+<span class="fc" id="L144">		}</span>
+<span class="fc" id="L145">		countries.sort(null);</span>
+<span class="fc" id="L146">		return countries.toArray(new String[0]);</span>
+	}
+	
+	/** Get smallest and largest date in dataset records */
+	public static Date[] getDateRange() throws Exception {
+<span class="fc" id="L151">		sortByLocationDate();</span>
+<span class="fc" id="L152">		String[] countries=getCountries(true);</span>
+<span class="fc" id="L153">		Date min=null;</span>
+<span class="fc" id="L154">		Date max=null;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		for(String country:countries) {</span>
+<span class="fc" id="L156">			int[] index=findByLocation(country);</span>
+<span class="fc" id="L157">			Date currMin=sdf.parse(getRecord(index[0]).get(&quot;date&quot;));</span>
+<span class="fc" id="L158">			Date currMax=sdf.parse(getRecord(index[1]).get(&quot;date&quot;));</span>
+<span class="fc bfc" id="L159" title="All 4 branches covered.">			if(min==null || currMin.before(min)) {</span>
+<span class="fc" id="L160">				min=currMin;</span>
+			}
+<span class="pc bpc" id="L162" title="1 of 4 branches missed.">			if(max==null || currMax.after(max)) {</span>
+<span class="fc" id="L163">				max=currMax;</span>
+			}
+		}
+<span class="fc" id="L166">		return new Date[] {min,max};</span>
+	}
+	
+	/** Sort the records first by location, then date, in ascending order. */
+	public static int sortByLocationDate() {
+<span class="pc bpc" id="L171" title="3 of 8 branches missed.">		if(sortRule!=null &amp;&amp; sortRule.length&gt;=2 &amp;&amp; sortRule[0]==&quot;location&quot; &amp;&amp; sortRule[1]==&quot;date&quot;){</span>
+<span class="fc" id="L172">			return 0;</span>
+		}
+<span class="fc" id="L174">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
+
+<span class="fc" id="L176">		Arrays.sort(records,(Record a,Record b)-&gt;{</span>
+<span class="fc" id="L177">			int out=a.get(&quot;location&quot;).compareTo(b.get(&quot;location&quot;));</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">			if(out==0)</span>
+				try {
+<span class="fc" id="L180">					Date aDate=sdf.parse(a.get(&quot;date&quot;));</span>
+<span class="fc" id="L181">					Date bDate=sdf.parse(b.get(&quot;date&quot;));</span>
+<span class="fc" id="L182">					out=aDate.compareTo(bDate);</span>
+<span class="pc" id="L183">				} catch (ParseException e) {}</span>
+<span class="fc" id="L184">			return out;</span>
+		});
+		
+<span class="fc" id="L187">		sortRule=new String[] {&quot;location&quot;,&quot;date&quot;};</span>
+<span class="fc" id="L188">		return 0;</span>
+	}
+	
+	/** Return the start and end index of the location, 
+	 * where records will be/have been sorted by location and date. */
+	public static int[] findByLocation(String location) {
+<span class="fc" id="L194">		sortByLocationDate();</span>
+<span class="fc" id="L195">		int leftMostIndex=findLeftmostLocationHelper(location,0,records.length-1);</span>
+<span class="fc" id="L196">		int rightMostIndex=findRightmostLocationHelper(location,leftMostIndex,records.length-1);</span>
+<span class="fc" id="L197">		return new int[] {leftMostIndex,rightMostIndex};</span>
+	}
+	
+	/** Find the smallest index of the record with location. */
+	private static int findLeftmostLocationHelper(String location,int start,int end) {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">		if(start&gt;end) return -1;</span>
+<span class="fc" id="L203">		int mid=(start+end)/2;</span>
+<span class="fc" id="L204">		String midLoc=records[mid].get(&quot;location&quot;);</span>
+<span class="fc" id="L205">		int result=midLoc.compareTo(location);</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		if(result==0) {</span>
+<span class="fc" id="L207">			int leftMost=findLeftmostLocationHelper(location,start,mid-1);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">			return leftMost==-1?mid:leftMost;</span>
+		}	
+<span class="fc bfc" id="L210" title="All 2 branches covered.">		else if(result&lt;0) return findLeftmostLocationHelper(location,mid+1,end);</span>
+<span class="fc" id="L211">		else return findLeftmostLocationHelper(location,start,mid-1);</span>
+	}
+	
+	/** Find the largest index of the record with location. */
+	private static int findRightmostLocationHelper(String location,int start,int end) {
+<span class="fc bfc" id="L216" title="All 2 branches covered.">		if(start&gt;end) return -1;</span>
+<span class="fc" id="L217">		int mid=(start+end)/2;</span>
+<span class="fc" id="L218">		String midLoc=records[mid].get(&quot;location&quot;);</span>
+<span class="fc" id="L219">		int result=midLoc.compareTo(location);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">		if(result==0) {</span>
+<span class="fc" id="L221">			int rightMost=findRightmostLocationHelper(location,mid+1,end);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">			return rightMost==-1?mid:rightMost;</span>
+		}	
+<span class="fc bfc" id="L224" title="All 2 branches covered.">		else if(result&lt;0) return findRightmostLocationHelper(location,mid+1,end);</span>
+<span class="fc" id="L225">		else return findRightmostLocationHelper(location,start,mid-1);</span>
+	}
+	
+	/** Find the indices of records of a location between the start and end date of interest.
+	 * @param location 
+	 * The country of interest
+	 * @param start
+	 * The start date of period of interest.
+	 * @param end
+	 * The end date of period of interest.
+	 * @return 
+	 * Proper indices of the first and last records for chart according to the location and period specified,
+	 * null if records with location are not found,
+	 * -1 if the first or last index is not found.
+	 * Read the source code for further information.
+	 */
+	public static int[] findByPeriodForChart(String location,Date start,Date end) {
+<span class="fc" id="L242">		sortByLocationDate();</span>
+<span class="fc" id="L243">		int[] index=findByLocation(location);</span>
+<span class="fc" id="L244">		int leftMost=index[0];</span>
+<span class="fc" id="L245">		int rightMost=index[1];</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">		if(leftMost==-1) {return null;}</span>
+<span class="fc" id="L247">		int first=findSmallestDateGeq(start,leftMost,rightMost);</span>
+<span class="fc" id="L248">		int last=findLargestDateLeq(end,leftMost,rightMost);</span>
+<span class="fc bfc" id="L249" title="All 4 branches covered.">		if(first==-1 || last==-1) return new int[] {first,last};</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">		if(first&gt;last) return new int[] {last,first};</span>
+<span class="fc" id="L251">		return new int[] {first,last};</span>
+	}
+	
+	/** Find the index with date or right after it, return -1 if not found. */
+	private static int findSmallestDateGeq(Date dateFrom,int start,int end){
+<span class="fc" id="L256">		int length=end-start+1;</span>
+<span class="pc bpc" id="L257" title="2 of 4 branches missed.">		assert(length&gt;=1);</span>
+<span class="fc" id="L258">		int mid=(start+end)/2;</span>
+<span class="fc" id="L259">		Date date=null;</span>
+		try {				
+<span class="fc" id="L261">			date=sdf.parse(records[mid].get(&quot;date&quot;));</span>
+		}
+<span class="pc" id="L263">		catch(Exception e) {e.printStackTrace();}</span>
+<span class="fc" id="L264">		int result=date.compareTo(dateFrom);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">		if(result==0) {</span>
+<span class="fc" id="L266">			return mid;</span>
+		}
+<span class="fc bfc" id="L268" title="All 2 branches covered.">		else if(result&gt;0) {</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">			if(length&lt;=2) return mid;</span>
+<span class="fc" id="L270">			else return findSmallestDateGeq(dateFrom,start,mid);</span>
+		}
+		else {
+<span class="fc bfc" id="L273" title="All 2 branches covered.">			if(length==1) return -1;</span>
+<span class="fc" id="L274">			else return findSmallestDateGeq(dateFrom,mid+1,end);</span>
+		}
+	}
+	
+	/** Find the index with date or right after it, return -1 if not found. */
+	private static int findLargestDateLeq(Date dateTo,int start,int end){
+<span class="fc" id="L280">		int length=end-start+1;</span>
+<span class="pc bpc" id="L281" title="2 of 4 branches missed.">		assert(length&gt;=1);</span>
+<span class="fc" id="L282">		int mid=(start+end+1)/2;</span>
+<span class="fc" id="L283">		Date date=null;</span>
+		try {				
+<span class="fc" id="L285">			date=sdf.parse(records[mid].get(&quot;date&quot;));</span>
+		}
+<span class="pc" id="L287">		catch(Exception e) {e.printStackTrace();}</span>
+<span class="fc" id="L288">		int result=date.compareTo(dateTo);</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">		if(result==0) {</span>
+<span class="fc" id="L290">			return mid;</span>
+		}
+<span class="fc bfc" id="L292" title="All 2 branches covered.">		else if(result&lt;0) {</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">			if(length&lt;=2) return mid;</span>
+<span class="fc" id="L294">			else return findLargestDateLeq(dateTo,mid,end);</span>
+		}
+		else {
+<span class="fc bfc" id="L297" title="All 2 branches covered.">			if(length==1) return -1;</span>
+<span class="fc" id="L298">			else return findLargestDateLeq(dateTo,start,mid-1);</span>
+		}
+	}
+	
+	/** Helper function for unit testing, please avoid using it. */
+	public static void clearSortRule() {
+<span class="fc" id="L304">		sortRule=null;</span>
+<span class="fc" id="L305">	}</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
