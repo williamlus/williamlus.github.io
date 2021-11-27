@@ -7,7 +7,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
-/** Class to generate chart for Task 2. */
+/** Class to generate chart for Task 2 and 3. */
 <span class="nc" id="L11">public class Chart {</span>
 	/**
 	 * Returns LineChart of Confirmed Deaths.
@@ -330,226 +330,240 @@ import javafx.scene.chart.XYChart;
 
 <span class="fc" id="L331">		return lineChart;</span>
 	}
-	
+	/**
+	 * Returns LineChart of the change of Vaccination rate and linear regression on data.
+	 * @param countries the list of countries
+	 * @param startDate the startdate for record checking 
+	 * @param endDate the enddate for record checking
+	 * **/
 	public static LineChart getVaccinationRegression(String[] countries, Date startDate, Date endDate) throws Exception{
 		
-<span class="nc" id="L336">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
-<span class="nc" id="L337">		SimpleDateFormat sdfChart = new SimpleDateFormat(&quot;MMM dd, yyyy&quot;);</span>
+<span class="nc" id="L341">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
+<span class="nc" id="L342">		SimpleDateFormat sdfChart = new SimpleDateFormat(&quot;MMM dd, yyyy&quot;);</span>
 		
 		// Set the x-axis
-<span class="nc" id="L340">		final NumberAxis xAxis = new NumberAxis();</span>
-<span class="nc" id="L341">        xAxis.setLabel(&quot;Dates of Interest&quot;);</span>
-<span class="nc" id="L342">        xAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(xAxis) {</span>
+<span class="nc" id="L345">		final NumberAxis xAxis = new NumberAxis();</span>
+<span class="nc" id="L346">        xAxis.setLabel(&quot;Dates of Interest&quot;);</span>
+<span class="nc" id="L347">        xAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(xAxis) {</span>
         	@Override             
         	public String toString(final Number object){                 
-<span class="nc" id="L345">        		double time=(Double)object;</span>
-<span class="nc" id="L346">        		Date date=new Date((long)time);</span>
-<span class="nc" id="L347">        		return sdfChart.format(date);</span>
+<span class="nc" id="L350">        		double time=(Double)object;</span>
+<span class="nc" id="L351">        		Date date=new Date((long)time);</span>
+<span class="nc" id="L352">        		return sdfChart.format(date);</span>
         	}         
         });
    
         // Set the y-axis
-<span class="nc" id="L352">        final NumberAxis yAxis = new NumberAxis();</span>
-<span class="nc" id="L353">        yAxis.setLabel(&quot;Rate change of Vaccination(%)&quot;);</span>
+<span class="nc" id="L357">        final NumberAxis yAxis = new NumberAxis();</span>
+<span class="nc" id="L358">        yAxis.setLabel(&quot;Rate change of Vaccination(%)&quot;);</span>
         
         // Create Line Chart
-<span class="nc" id="L356">        LineChart&lt;Number, Number&gt; lineChart = new LineChart&lt;Number, Number&gt;(xAxis, yAxis);</span>
-<span class="nc" id="L357">        lineChart.setTitle(&quot;Rate change and Linear Regression of Vaccination against COVID-19&quot;);</span>
+<span class="nc" id="L361">        LineChart&lt;Number, Number&gt; lineChart = new LineChart&lt;Number, Number&gt;(xAxis, yAxis);</span>
+<span class="nc" id="L362">        lineChart.setTitle(&quot;Rate change and Linear Regression of Vaccination against COVID-19&quot;);</span>
         
-<span class="nc" id="L359">        lineChart.setPrefHeight(600.0);</span>
-<span class="nc" id="L360">        lineChart.setPrefWidth(1000.0);</span>
+<span class="nc" id="L364">        lineChart.setPrefHeight(600.0);</span>
+<span class="nc" id="L365">        lineChart.setPrefWidth(1000.0);</span>
         
-<span class="nc" id="L362">        lineChart.setCreateSymbols(false);</span>
-<span class="nc" id="L363">        xAxis.setAutoRanging(true);</span>
-<span class="nc" id="L364">        xAxis.setForceZeroInRange(false);</span>
-<span class="nc" id="L365">        yAxis.setAutoRanging(true);</span>
-<span class="nc" id="L366">        yAxis.setForceZeroInRange(false);</span>
-<span class="nc" id="L367">        lineChart.autosize();</span>
+<span class="nc" id="L367">        lineChart.setCreateSymbols(false);</span>
+<span class="nc" id="L368">        xAxis.setAutoRanging(true);</span>
+<span class="nc" id="L369">        xAxis.setForceZeroInRange(false);</span>
+<span class="nc" id="L370">        yAxis.setAutoRanging(true);</span>
+<span class="nc" id="L371">        yAxis.setForceZeroInRange(false);</span>
+<span class="nc" id="L372">        lineChart.autosize();</span>
         
-<span class="nc" id="L369">        DataReader.sortByLocationDate();</span>
-<span class="nc" id="L370">        Record[] records=DataReader.getRecords();</span>
-<span class="nc bnc" id="L371" title="All 2 branches missed.">        for(String country:countries) {</span>
-<span class="nc" id="L372">        XYChart.Series list = new XYChart.Series(); </span>
-<span class="nc" id="L373">        XYChart.Series listR = new XYChart.Series(); // Use a new line for regression</span>
-<span class="nc" id="L374">    	list.setName(country);</span>
-<span class="nc" id="L375">    	listR.setName(&quot;Linear Regression of &quot;+country);</span>
-<span class="nc" id="L376">    	float totalPerM=0; // Record the latest number</span>
+<span class="nc" id="L374">        DataReader.sortByLocationDate();</span>
+<span class="nc" id="L375">        Record[] records=DataReader.getRecords();</span>
+<span class="nc bnc" id="L376" title="All 2 branches missed.">        for(String country:countries) {</span>
+<span class="nc" id="L377">        XYChart.Series list = new XYChart.Series(); </span>
+<span class="nc" id="L378">        XYChart.Series listR = new XYChart.Series(); // Use a new line for regression</span>
+<span class="nc" id="L379">    	list.setName(country);</span>
+<span class="nc" id="L380">    	listR.setName(&quot;Linear Regression of &quot;+country);</span>
+<span class="nc" id="L381">    	float totalPerM=0; // Record the latest number</span>
   
-<span class="nc" id="L378">    	int[] range=DataReader.findByLocation(country); // Find the index range</span>
+<span class="nc" id="L383">    	int[] range=DataReader.findByLocation(country); // Find the index range</span>
     		
     		// Records not found
-<span class="nc bnc" id="L381" title="All 2 branches missed.">    	if(range[0]==-1) {</span>
-<span class="nc" id="L382">    		list.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
-<span class="nc" id="L383">        	list.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
-<span class="nc" id="L384">        	listR.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
-<span class="nc" id="L385">        	listR.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
-<span class="nc" id="L386">        	lineChart.getData().add(list);</span>
-<span class="nc" id="L387">        	lineChart.getData().add(listR);</span>
-<span class="nc" id="L388">        	return lineChart;</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">    	if(range[0]==-1) {</span>
+<span class="nc" id="L387">    		list.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
+<span class="nc" id="L388">        	list.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
+<span class="nc" id="L389">        	listR.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
+<span class="nc" id="L390">        	listR.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
+<span class="nc" id="L391">        	lineChart.getData().add(list);</span>
+<span class="nc" id="L392">        	lineChart.getData().add(listR);</span>
+<span class="nc" id="L393">        	return lineChart;</span>
     	}
     	
     		// Find the index range of period for chart
-<span class="nc" id="L392">        int[] index=DataReader.findByPeriodForChart(country, startDate, endDate);</span>
-<span class="nc" id="L393">        int left=index[0];</span>
-<span class="nc" id="L394">        int right=index[1];</span>
+<span class="nc" id="L397">        int[] index=DataReader.findByPeriodForChart(country, startDate, endDate);</span>
+<span class="nc" id="L398">        int left=index[0];</span>
+<span class="nc" id="L399">        int right=index[1];</span>
         	
     		// Find the largest number before start
-<span class="nc bnc" id="L397" title="All 2 branches missed.">    	for(int po=left;po&gt;=range[0];po--) {</span>
-<span class="nc" id="L398">    		String temp=records[po].get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="nc bnc" id="L399" title="All 2 branches missed.">    		totalPerM=temp.length()==0?0:Float.parseFloat(temp);</span>
-<span class="nc bnc" id="L400" title="All 2 branches missed.">        	if (totalPerM&gt;0) break;</span>
+<span class="nc bnc" id="L402" title="All 2 branches missed.">    	for(int po=left;po&gt;=range[0];po--) {</span>
+<span class="nc" id="L403">    		String temp=records[po].get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">    		totalPerM=temp.length()==0?0:Float.parseFloat(temp);</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">        	if (totalPerM&gt;0) break;</span>
     	}
-<span class="nc" id="L402">    	float[] y=new float[right-left];</span>
-<span class="nc" id="L403">    	float help=totalPerM;</span>
-<span class="nc bnc" id="L404" title="All 2 branches missed.">    	for(int i=left;i&lt;=right;i++) {</span>
-<span class="nc" id="L405">    		Record rec=records[i];</span>
-<span class="nc" id="L406">        	String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="nc" id="L407">        	float nn=help;</span>
-<span class="nc bnc" id="L408" title="All 2 branches missed.">        	if (!s.equals(&quot;&quot;)) {</span>
-<span class="nc" id="L409">				nn=Float.parseFloat(s);</span>
+<span class="nc" id="L407">    	float[] y=new float[right-left];</span>
+<span class="nc" id="L408">    	float help=totalPerM;</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">    	for(int i=left;i&lt;=right;i++) {</span>
+<span class="nc" id="L410">    		Record rec=records[i];</span>
+<span class="nc" id="L411">        	String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="nc" id="L412">        	float nn=help;</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">        	if (!s.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L414">				nn=Float.parseFloat(s);</span>
 			}
-<span class="nc bnc" id="L411" title="All 2 branches missed.">        	if(i==left) continue;</span>
-<span class="nc" id="L412">    		y[i-left-1]=nn-help;</span>
-<span class="nc" id="L413">    		help=nn;</span>
+<span class="nc bnc" id="L416" title="All 2 branches missed.">        	if(i==left) continue;</span>
+<span class="nc" id="L417">    		y[i-left-1]=nn-help;</span>
+<span class="nc" id="L418">    		help=nn;</span>
     	}
-<span class="nc" id="L415">    	float[] result=doRegression(y,right-left);</span>
+<span class="nc" id="L420">    	float[] result=doRegression(y,right-left);</span>
         	// Plot the chart
-<span class="nc bnc" id="L417" title="All 2 branches missed.">        for(int i=left+1;i&lt;=right;i++) {</span>
-<span class="nc" id="L418">        	Record rec=records[i];</span>
-<span class="nc" id="L419">        	String dateStr=rec.get(&quot;date&quot;);</span>
-<span class="nc" id="L420">			Date date=sdf.parse(dateStr);</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">        for(int i=left+1;i&lt;=right;i++) {</span>
+<span class="nc" id="L423">        	Record rec=records[i];</span>
+<span class="nc" id="L424">        	String dateStr=rec.get(&quot;date&quot;);</span>
+<span class="nc" id="L425">			Date date=sdf.parse(dateStr);</span>
 			
-<span class="nc" id="L422">			list.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),y[i-left-1]));</span>
-<span class="nc" id="L423">			listR.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),result[i-left-1]));</span>
+<span class="nc" id="L427">			list.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),y[i-left-1]));</span>
+<span class="nc" id="L428">			listR.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),result[i-left-1]));</span>
         }
-<span class="nc" id="L425">        lineChart.getData().add(list);</span>
-<span class="nc" id="L426">        lineChart.getData().add(listR);</span>
+<span class="nc" id="L430">        lineChart.getData().add(list);</span>
+<span class="nc" id="L431">        lineChart.getData().add(listR);</span>
         }
-<span class="nc" id="L428">        return lineChart;</span>
+<span class="nc" id="L433">        return lineChart;</span>
 	}
-	
+	/**
+	 * Returns LineChart of Vaccination rate and linear regression on data.
+	 * @param countries the list of countries
+	 * @param startDate the startdate for record checking 
+	 * @param endDate the enddate for record checking
+	 * **/
 	public static LineChart getVaccinationRateRegression(String[] countries, Date startDate, Date endDate) throws Exception{
 		
-<span class="fc" id="L433">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
-<span class="fc" id="L434">		SimpleDateFormat sdfChart = new SimpleDateFormat(&quot;MMM dd, yyyy&quot;);</span>
+<span class="fc" id="L443">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;MM/dd/yyyy&quot;);</span>
+<span class="fc" id="L444">		SimpleDateFormat sdfChart = new SimpleDateFormat(&quot;MMM dd, yyyy&quot;);</span>
 		
 		// Set the x-axis
-<span class="fc" id="L437">		final NumberAxis xAxis = new NumberAxis();</span>
-<span class="fc" id="L438">        xAxis.setLabel(&quot;Dates of Interest&quot;);</span>
-<span class="fc" id="L439">        xAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(xAxis) {</span>
+<span class="fc" id="L447">		final NumberAxis xAxis = new NumberAxis();</span>
+<span class="fc" id="L448">        xAxis.setLabel(&quot;Dates of Interest&quot;);</span>
+<span class="fc" id="L449">        xAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(xAxis) {</span>
         	@Override             
         	public String toString(final Number object){                 
-<span class="nc" id="L442">        		double time=(Double)object;</span>
-<span class="nc" id="L443">        		Date date=new Date((long)time);</span>
-<span class="nc" id="L444">        		return sdfChart.format(date);</span>
+<span class="nc" id="L452">        		double time=(Double)object;</span>
+<span class="nc" id="L453">        		Date date=new Date((long)time);</span>
+<span class="nc" id="L454">        		return sdfChart.format(date);</span>
         	}         
         });
    
         // Set the y-axis
-<span class="fc" id="L449">        final NumberAxis yAxis = new NumberAxis();</span>
-<span class="fc" id="L450">        yAxis.setLabel(&quot;Rate of Vaccination(%)&quot;);</span>
+<span class="fc" id="L459">        final NumberAxis yAxis = new NumberAxis();</span>
+<span class="fc" id="L460">        yAxis.setLabel(&quot;Rate of Vaccination(%)&quot;);</span>
         
         // Create Line Chart
-<span class="fc" id="L453">        LineChart&lt;Number, Number&gt; lineChart = new LineChart&lt;Number, Number&gt;(xAxis, yAxis);</span>
-<span class="fc" id="L454">        lineChart.setTitle(&quot;Rate and Linear Regression of Vaccination against COVID-19&quot;);</span>
+<span class="fc" id="L463">        LineChart&lt;Number, Number&gt; lineChart = new LineChart&lt;Number, Number&gt;(xAxis, yAxis);</span>
+<span class="fc" id="L464">        lineChart.setTitle(&quot;Rate and Linear Regression of Vaccination against COVID-19&quot;);</span>
         
-<span class="fc" id="L456">        lineChart.setPrefHeight(600.0);</span>
-<span class="fc" id="L457">        lineChart.setPrefWidth(1000.0);</span>
+<span class="fc" id="L466">        lineChart.setPrefHeight(600.0);</span>
+<span class="fc" id="L467">        lineChart.setPrefWidth(1000.0);</span>
         
-<span class="fc" id="L459">        lineChart.setCreateSymbols(false);</span>
-<span class="fc" id="L460">        xAxis.setAutoRanging(true);</span>
-<span class="fc" id="L461">        xAxis.setForceZeroInRange(false);</span>
-<span class="fc" id="L462">        yAxis.setAutoRanging(true);</span>
-<span class="fc" id="L463">        yAxis.setForceZeroInRange(false);</span>
-<span class="fc" id="L464">        lineChart.autosize();</span>
+<span class="fc" id="L469">        lineChart.setCreateSymbols(false);</span>
+<span class="fc" id="L470">        xAxis.setAutoRanging(true);</span>
+<span class="fc" id="L471">        xAxis.setForceZeroInRange(false);</span>
+<span class="fc" id="L472">        yAxis.setAutoRanging(true);</span>
+<span class="fc" id="L473">        yAxis.setForceZeroInRange(false);</span>
+<span class="fc" id="L474">        lineChart.autosize();</span>
         
-<span class="fc" id="L466">        DataReader.sortByLocationDate();</span>
-<span class="fc" id="L467">        Record[] records=DataReader.getRecords();</span>
-<span class="fc bfc" id="L468" title="All 2 branches covered.">        for(String country:countries) {</span>
-<span class="fc" id="L469">        XYChart.Series list = new XYChart.Series(); </span>
-<span class="fc" id="L470">        XYChart.Series listR = new XYChart.Series(); // Use a new line for regression</span>
-<span class="fc" id="L471">    	list.setName(country);</span>
-<span class="fc" id="L472">    	listR.setName(&quot;Linear Regression of &quot;+country);</span>
-<span class="fc" id="L473">    	float totalPerM=0; // Record the latest number</span>
+<span class="fc" id="L476">        DataReader.sortByLocationDate();</span>
+<span class="fc" id="L477">        Record[] records=DataReader.getRecords();</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">        for(String country:countries) {</span>
+<span class="fc" id="L479">        XYChart.Series list = new XYChart.Series(); </span>
+<span class="fc" id="L480">        XYChart.Series listR = new XYChart.Series(); // Use a new line for regression</span>
+<span class="fc" id="L481">    	list.setName(country);</span>
+<span class="fc" id="L482">    	listR.setName(&quot;Linear Regression of &quot;+country);</span>
+<span class="fc" id="L483">    	float totalPerM=0; // Record the latest number</span>
   
-<span class="fc" id="L475">    	int[] range=DataReader.findByLocation(country); // Find the index range</span>
+<span class="fc" id="L485">    	int[] range=DataReader.findByLocation(country); // Find the index range</span>
     		
     		// Records not found
-<span class="pc bpc" id="L478" title="1 of 2 branches missed.">    	if(range[0]==-1) {</span>
-<span class="nc" id="L479">    		list.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
-<span class="nc" id="L480">        	list.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
-<span class="nc" id="L481">        	listR.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
-<span class="nc" id="L482">        	listR.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
-<span class="nc" id="L483">        	lineChart.getData().add(list);</span>
-<span class="nc" id="L484">        	lineChart.getData().add(listR);</span>
-<span class="nc" id="L485">        	return lineChart;</span>
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">    	if(range[0]==-1) {</span>
+<span class="nc" id="L489">    		list.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
+<span class="nc" id="L490">        	list.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
+<span class="nc" id="L491">        	listR.getData().add(new XYChart.Data&lt;&gt;(startDate.getTime(),0));</span>
+<span class="nc" id="L492">        	listR.getData().add(new XYChart.Data&lt;&gt;(endDate.getTime(),0));</span>
+<span class="nc" id="L493">        	lineChart.getData().add(list);</span>
+<span class="nc" id="L494">        	lineChart.getData().add(listR);</span>
+<span class="nc" id="L495">        	return lineChart;</span>
     	}
     	
     		// Find the index range of period for chart
-<span class="fc" id="L489">        int[] index=DataReader.findByPeriodForChart(country, startDate, endDate);</span>
-<span class="fc" id="L490">        int left=index[0];</span>
-<span class="fc" id="L491">        int right=index[1];</span>
+<span class="fc" id="L499">        int[] index=DataReader.findByPeriodForChart(country, startDate, endDate);</span>
+<span class="fc" id="L500">        int left=index[0];</span>
+<span class="fc" id="L501">        int right=index[1];</span>
         	
     		// Find the largest number before start
-<span class="fc bfc" id="L494" title="All 2 branches covered.">    	for(int po=left;po&gt;=range[0];po--) {</span>
-<span class="fc" id="L495">    		String temp=records[po].get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">    		totalPerM=temp.length()==0?0:Float.parseFloat(temp);</span>
-<span class="pc bpc" id="L497" title="1 of 2 branches missed.">        	if (totalPerM&gt;0) break;</span>
+<span class="fc bfc" id="L504" title="All 2 branches covered.">    	for(int po=left;po&gt;=range[0];po--) {</span>
+<span class="fc" id="L505">    		String temp=records[po].get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">    		totalPerM=temp.length()==0?0:Float.parseFloat(temp);</span>
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">        	if (totalPerM&gt;0) break;</span>
     	}
-<span class="fc" id="L499">    	float[] y=new float[right-left+1];</span>
-<span class="fc" id="L500">    	float help=totalPerM;</span>
-<span class="fc bfc" id="L501" title="All 2 branches covered.">    	for(int i=left;i&lt;=right;i++) {</span>
-<span class="fc" id="L502">    		Record rec=records[i];</span>
-<span class="fc" id="L503">        	String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="fc bfc" id="L504" title="All 2 branches covered.">        	if (!s.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L505">				help=Float.parseFloat(s);</span>
-			}
-<span class="fc" id="L507">    		y[i-left]=help;</span>
-    	}
-<span class="fc" id="L509">    	float[] result=doRegression(y,right-left+1);</span>
-        	// Plot the chart
-<span class="fc bfc" id="L511" title="All 2 branches covered.">        for(int i=left;i&lt;=right;i++) {</span>
-<span class="fc" id="L512">        	Record rec=records[i];</span>
+<span class="fc" id="L509">    	float[] y=new float[right-left+1];</span>
+<span class="fc" id="L510">    	float help=totalPerM;</span>
+<span class="fc bfc" id="L511" title="All 2 branches covered.">    	for(int i=left;i&lt;=right;i++) {</span>
+<span class="fc" id="L512">    		Record rec=records[i];</span>
 <span class="fc" id="L513">        	String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
-<span class="fc" id="L514">        	String dateStr=rec.get(&quot;date&quot;);</span>
-<span class="fc" id="L515">			Date date=sdf.parse(dateStr);</span>
-<span class="fc bfc" id="L516" title="All 2 branches covered.">			if (!s.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L517">				totalPerM=Float.parseFloat(s);</span>
+<span class="fc bfc" id="L514" title="All 2 branches covered.">        	if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L515">				help=Float.parseFloat(s);</span>
+			}
+<span class="fc" id="L517">    		y[i-left]=help;</span>
+    	}
+<span class="fc" id="L519">    	float[] result=doRegression(y,right-left+1);</span>
+        	// Plot the chart
+<span class="fc bfc" id="L521" title="All 2 branches covered.">        for(int i=left;i&lt;=right;i++) {</span>
+<span class="fc" id="L522">        	Record rec=records[i];</span>
+<span class="fc" id="L523">        	String s = rec.get(&quot;people_fully_vaccinated_per_hundred&quot;);</span>
+<span class="fc" id="L524">        	String dateStr=rec.get(&quot;date&quot;);</span>
+<span class="fc" id="L525">			Date date=sdf.parse(dateStr);</span>
+<span class="fc bfc" id="L526" title="All 2 branches covered.">			if (!s.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L527">				totalPerM=Float.parseFloat(s);</span>
 			}
 			
-<span class="fc" id="L520">			list.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),totalPerM));</span>
-<span class="fc" id="L521">			listR.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),result[i-left]));</span>
+<span class="fc" id="L530">			list.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),totalPerM));</span>
+<span class="fc" id="L531">			listR.getData().add(new XYChart.Data&lt;&gt;(date.getTime(),result[i-left]));</span>
         }
-<span class="fc" id="L523">        lineChart.getData().add(list);</span>
-<span class="fc" id="L524">        lineChart.getData().add(listR);</span>
+<span class="fc" id="L533">        lineChart.getData().add(list);</span>
+<span class="fc" id="L534">        lineChart.getData().add(listR);</span>
         }
-<span class="fc" id="L526">        return lineChart;</span>
+<span class="fc" id="L536">        return lineChart;</span>
 	}
-	
+	/**
+	 * Returns an array of the linear regression result.
+	 * @param y the original data
+	 * @param num the number of data in the input array
+	 * **/
 	public static float[] doRegression(float[] y, int num) throws Exception{
-<span class="fc" id="L530">		float[] result=new float[num];</span>
-<span class="fc" id="L531">		float xbar=0f;</span>
-<span class="fc" id="L532">		float ybar=0f;</span>
-<span class="fc bfc" id="L533" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
-<span class="fc" id="L534">			xbar=xbar+i;</span>
-<span class="fc" id="L535">			ybar=ybar+y[i];</span>
+<span class="fc" id="L544">		float[] result=new float[num];</span>
+<span class="fc" id="L545">		float xbar=0f;</span>
+<span class="fc" id="L546">		float ybar=0f;</span>
+<span class="fc bfc" id="L547" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
+<span class="fc" id="L548">			xbar=xbar+i;</span>
+<span class="fc" id="L549">			ybar=ybar+y[i];</span>
 		}
-<span class="fc" id="L537">		xbar=xbar/num;</span>
-<span class="fc" id="L538">		ybar=ybar/num;</span>
-<span class="fc" id="L539">		float bbar=0f;</span>
-<span class="fc" id="L540">		float sq=0f;</span>
-<span class="fc bfc" id="L541" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
-<span class="fc" id="L542">			float xi=i-xbar;</span>
-<span class="fc" id="L543">			float yi=y[i]-ybar;</span>
-<span class="fc" id="L544">			bbar=bbar+xi*yi;</span>
-<span class="fc" id="L545">			sq=sq+xi*xi;</span>
+<span class="fc" id="L551">		xbar=xbar/num;</span>
+<span class="fc" id="L552">		ybar=ybar/num;</span>
+<span class="fc" id="L553">		float bbar=0f;</span>
+<span class="fc" id="L554">		float sq=0f;</span>
+<span class="fc bfc" id="L555" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
+<span class="fc" id="L556">			float xi=i-xbar;</span>
+<span class="fc" id="L557">			float yi=y[i]-ybar;</span>
+<span class="fc" id="L558">			bbar=bbar+xi*yi;</span>
+<span class="fc" id="L559">			sq=sq+xi*xi;</span>
 		}
-<span class="fc" id="L547">		bbar=bbar/sq;</span>
-<span class="fc" id="L548">		float abar=ybar-xbar*bbar;</span>
-<span class="fc bfc" id="L549" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
-<span class="fc" id="L550">			result[i]=abar+bbar*i;</span>
+<span class="fc" id="L561">		bbar=bbar/sq;</span>
+<span class="fc" id="L562">		float abar=ybar-xbar*bbar;</span>
+<span class="fc bfc" id="L563" title="All 2 branches covered.">		for (int i=0;i&lt;num;i++) {</span>
+<span class="fc" id="L564">			result[i]=abar+bbar*i;</span>
 		}
-<span class="fc" id="L552">		return result;</span>
+<span class="fc" id="L566">		return result;</span>
 	}
 
 }

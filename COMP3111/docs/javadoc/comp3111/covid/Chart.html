@@ -81,7 +81,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <pre>public class <span class="type-name-label">Chart</span>
 extends java.lang.Object</pre>
-<div class="block">Class to generate chart for Task 2.</div>
+<div class="block">Class to generate chart for Task 2 and 3.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -128,7 +128,9 @@ extends java.lang.Object</pre>
 <td class="col-first"><code>static float[]</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#doRegression(float%5B%5D,int)">doRegression</a></span>&#8203;(float[]&nbsp;y,
 int&nbsp;num)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Returns an array of the linear regression result.</div>
+</td>
 </tr>
 <tr class="row-color" id="i1">
 <td class="col-first"><code>static java.lang.Object[]</code></td>
@@ -162,14 +164,18 @@ java.util.Date&nbsp;endDate)</code></th>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getVaccinationRateRegression(java.lang.String%5B%5D,java.util.Date,java.util.Date)">getVaccinationRateRegression</a></span>&#8203;(java.lang.String[]&nbsp;countries,
 java.util.Date&nbsp;startDate,
 java.util.Date&nbsp;endDate)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Returns LineChart of Vaccination rate and linear regression on data.</div>
+</td>
 </tr>
 <tr class="row-color" id="i5">
 <td class="col-first"><code>static javafx.scene.chart.LineChart</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getVaccinationRegression(java.lang.String%5B%5D,java.util.Date,java.util.Date)">getVaccinationRegression</a></span>&#8203;(java.lang.String[]&nbsp;countries,
 java.util.Date&nbsp;startDate,
 java.util.Date&nbsp;endDate)</code></th>
-<td class="col-last">&nbsp;</td>
+<td class="col-last">
+<div class="block">Returns LineChart of the change of Vaccination rate and linear regression on data.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -263,7 +269,12 @@ java.util.Date&nbsp;endDate)</span>
 java.util.Date&nbsp;startDate,
 java.util.Date&nbsp;endDate)</span>
                                                              throws <span class="exceptions">java.lang.Exception</span></div>
+<div class="block">Returns LineChart of the change of Vaccination rate and linear regression on data.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>countries</code> - the list of countries</dd>
+<dd><code>startDate</code> - the startdate for record checking</dd>
+<dd><code>endDate</code> - the enddate for record checking</dd>
 <dt>Throws:</dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>
@@ -276,7 +287,12 @@ java.util.Date&nbsp;endDate)</span>
 java.util.Date&nbsp;startDate,
 java.util.Date&nbsp;endDate)</span>
                                                                  throws <span class="exceptions">java.lang.Exception</span></div>
+<div class="block">Returns LineChart of Vaccination rate and linear regression on data.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>countries</code> - the list of countries</dd>
+<dd><code>startDate</code> - the startdate for record checking</dd>
+<dd><code>endDate</code> - the enddate for record checking</dd>
 <dt>Throws:</dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>
@@ -288,7 +304,11 @@ java.util.Date&nbsp;endDate)</span>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float[]</span>&nbsp;<span class="member-name">doRegression</span>&#8203;(<span class="parameters">float[]&nbsp;y,
 int&nbsp;num)</span>
                             throws <span class="exceptions">java.lang.Exception</span></div>
+<div class="block">Returns an array of the linear regression result.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>y</code> - the original data</dd>
+<dd><code>num</code> - the number of data in the input array</dd>
 <dt>Throws:</dt>
 <dd><code>java.lang.Exception</code></dd>
 </dl>
