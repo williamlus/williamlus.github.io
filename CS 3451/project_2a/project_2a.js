@@ -35,8 +35,8 @@ let cameraRotation=0;
 
 // called once at the start
 function setup() {
-  // let seed=new Date().getTime();
-  let seed=1645070654157;
+  let seed=new Date().getTime();
+  // let seed=1645070654157;
   console.log('random seed: '+seed);
   randomSeed(seed);
   createCanvas(800, 600, WEBGL);
