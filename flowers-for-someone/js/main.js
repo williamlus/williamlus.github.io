@@ -1,0 +1,1 @@
+onload=()=>{const e=setTimeout(()=>{function t(){l<o.length&&(n.innerHTML+=o[l],l++,setTimeout(t,300))}document.body.classList.remove("not-loaded");const o="I LOVE U".split(""),n=document.getElementById("title");let l=0;t(),clearTimeout(e)},1e3)};
