@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鸡兔同笼大冒险</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @keyframes fadeIn { from { opacity: 0; transform: translateX(30px);} to { opacity: 1; transform: translateX(0);} }
+  @keyframes scaleIn { from { transform: scale(0);} to { transform: scale(1);} }
+  @keyframes spinIn { from { transform: scale(0) rotate(-180deg);} to { transform: scale(1) rotate(0);} }
+  @keyframes slideDown { from { opacity: 0; max-height: 0;} to { opacity: 1; max-height: 500px;} }
+  .stage-enter { animation: fadeIn 0.3s ease-out; }
+  .scale-in { animation: scaleIn 0.4s cubic-bezier(.5,1.5,.5,1); }
+  .spin-in { animation: spinIn 0.6s cubic-bezier(.5,1.5,.5,1); }
+  .slide-down { animation: slideDown 0.3s ease-out; overflow: hidden; }
+  .leg, .wheel { transition: transform 0.4s cubic-bezier(.5,1.5,.5,1), opacity 0.4s; transform-origin: top center; }
+  input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+  .hidden-stage { display: none; }
+</style>
+</head>
+<body>
+<div class="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 p-4">
+  <div class="max-w-2xl mx-auto">
+    <div id="progress" class="mb-4 hidden">
+      <div class="flex justify-between text-xs text-amber-700 mb-1">
+        <span id="progressText"></span>
+        <span id="progressName"></span>
+      </div>
+      <div class="h-2 bg-amber-100 rounded-full overflow-hidden">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-400 transition-all duration-500" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+      <div id="stageContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ Icon SVGs ============
+const ICONS = {
+  lightbulb: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
+  check: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  sparkles: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/></svg>',
+  star: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>',
+  rotate: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>'
+};
+
+// ============ State ============
+const state = {
+  stage: 0,
+  totalStages: 10,
+  // Stage 1
+  s1_idx: 0, s1_h: '', s1_f: '', s1_fb: null,
+  s1_rounds: [{c:1,r:0},{c:0,r:1},{c:2,r:0},{c:1,r:1},{c:2,r:1}],
+  // Stage 2
+  s2_k: 0,
+  // Stage 3
+  s3_k: 0, s3_revealed: false, s3_guess: '', s3_fb: null,
+  s3_animals: [{type:'chicken'},{type:'rabbit'},{type:'chicken'},{type:'rabbit'},{type:'chicken'}],
+  // Stage 4
+  s4_c: 5,
+  // Stage 5
+  s5_c: '', s5_r: '', s5_hint: false, s5_fb: null,
+  // Stage 6
+  s6_b: '', s6_c: '', s6_hint: false, s6_fb: null,
+  // Stage 7
+  s7_t: '', s7_c: '', s7_hint: false, s7_fb: null, s7_assume: null,
+  // Stage 8
+  s8_t: '', s8_c: '', s8_step: 0, s8_fb: null,
+  // Stage 9
+  s9_c: '', s9_r: '', s9_fb: null, s9_tries: 0, s9_locked: false,
+};
+
+const STAGE_NAMES = ['开始','数数','抬腿','侦探','滑动','列式','停车场','三轮挑战','三种组合','终极','胜利'];
+
+// ============ Helpers ============
+function setState(updates) {
+  Object.assign(state, updates);
+  render();
+}
+
+function next() {
+  state.stage = Math.min(state.stage + 1, state.totalStages);
+  render();
+}
+
+function restart() {
+  // Reset all
+  Object.assign(state, {
+    stage: 0,
+    s1_idx: 0, s1_h: '', s1_f: '', s1_fb: null,
+    s2_k: 0,
+    s3_k: 0, s3_revealed: false, s3_guess: '', s3_fb: null,
+    s4_c: 5,
+    s5_c: '', s5_r: '', s5_hint: false, s5_fb: null,
+    s6_b: '', s6_c: '', s6_hint: false, s6_fb: null,
+    s7_t: '', s7_c: '', s7_hint: false, s7_fb: null, s7_assume: null,
+    s8_t: '', s8_c: '', s8_step: 0, s8_fb: null,
+    s9_c: '', s9_r: '', s9_fb: null, s9_tries: 0, s9_locked: false,
+  });
+  render();
+}
+
+// Animal/Vehicle renderers
+function animalHTML(type, liftedLegs = 0, abstract = false) {
+  const totalLegs = type === 'chicken' ? 2 : 4;
+  const head = abstract
+    ? '<div class="w-9 h-9 rounded-full bg-gradient-to-br from-slate-300 to-slate-500 border-2 border-slate-600 shadow-inner flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-slate-700"></div></div>'
+    : `<span class="text-4xl select-none">${type === 'chicken' ? '🐔' : '🐰'}</span>`;
+  let legs = '';
+  for (let i = 0; i < totalLegs; i++) {
+    const lifted = i < liftedLegs;
+    const style = lifted
+      ? 'transform: translateY(-10px) rotate(-55deg); opacity: 0.2;'
+      : 'transform: translateY(0) rotate(0); opacity: 1;';
+    legs += `<div class="leg w-1 h-4 bg-orange-900 rounded-full" style="${style}"></div>`;
+  }
+  return `<div class="flex flex-col items-center mx-1">
+    <div class="leading-none flex items-center justify-center h-10">${head}</div>
+    <div class="flex gap-0.5 mt-0.5">${legs}</div>
+  </div>`;
+}
+
+function vehicleHTML(type, raisedWheels = 0) {
+  const config = { bike: {icon:'🚲', wheels:2}, tri: {icon:'🛺', wheels:3}, car: {icon:'🚗', wheels:4} }[type];
+  let wheels = '';
+  for (let i = 0; i < config.wheels; i++) {
+    const raised = i < raisedWheels;
+    const style = raised ? 'transform: translateY(-10px); opacity: 0.2;' : 'transform: translateY(0); opacity: 1;';
+    wheels += `<div class="wheel w-2 h-2 rounded-full bg-gray-700 border border-gray-900" style="${style}"></div>`;
+  }
+  return `<div class="flex flex-col items-center mx-1">
+    <span class="text-4xl leading-none select-none">${config.icon}</span>
+    <div class="flex gap-0.5 mt-0.5">${wheels}</div>
+  </div>`;
+}
+
+function repeat(n, fn) {
+  let s = '';
+  for (let i = 0; i < n; i++) s += fn(i);
+  return s;
+}
+
+// ============ Stages ============
+function stage0() {
+  return `<div class="text-center space-y-5">
+    <div class="text-6xl scale-in">🐔🐰</div>
+    <h1 class="text-3xl font-bold text-amber-900">鸡兔同笼大冒险</h1>
+    <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-200 text-left text-amber-900 space-y-2">
+      <p class="text-base">📜 古代中国《孙子算经》中记载了一道千古奇题：</p>
+      <p class="text-base italic font-medium">"今有雉兔同笼，上有三十五头，下有九十四足，问雉兔各几何？"</p>
+      <p class="text-sm text-amber-700">笼子里有鸡和兔，从上数有 35 个头，从下数有 94 只脚，问鸡和兔各有多少只？</p>
+    </div>
+    <p class="text-amber-800 text-sm">通关后，你还能用同样的思路解开停车场、自行车棚的奥秘！</p>
+    <button onclick="next()" class="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow-lg">开始冒险 →</button>
+  </div>`;
+}
+
+function stage1() {
+  const r = state.s1_rounds[state.s1_idx];
+  const heads = r.c + r.r;
+  const feet = r.c * 2 + r.r * 4;
+  const dots = state.s1_rounds.map((_, i) =>
+    `<div class="w-2 h-2 rounded-full ${i <= state.s1_idx ? 'bg-amber-500' : 'bg-amber-200'}"></div>`
+  ).join('');
+
+  let fbHTML = '';
+  if (state.s1_fb === 'correct') fbHTML = `<div class="text-center text-green-600 font-bold flex items-center justify-center gap-2 stage-enter">${ICONS.check}正确！</div>`;
+  else if (state.s1_fb === 'wrong') fbHTML = `<div class="text-center text-red-500 font-bold flex items-center justify-center gap-2 stage-enter">${ICONS.x}再仔细数数～</div>`;
+
+  return `<div class="space-y-5">
+    <h2 class="text-2xl font-bold text-amber-900 text-center">第一关 · 数一数</h2>
+    <p class="text-center text-amber-700 text-sm">观察图中：有几个头？有几只脚？</p>
+    <div class="bg-green-50 rounded-2xl p-6 border-2 border-green-200 min-h-32 flex items-center justify-center flex-wrap gap-2">
+      ${repeat(r.c, () => animalHTML('chicken'))}
+      ${repeat(r.r, () => animalHTML('rabbit'))}
+    </div>
+    <div class="flex justify-center gap-3 items-end flex-wrap">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">头数</label>
+        <input value="${state.s1_h}" oninput="state.s1_h=this.value" class="w-20 text-center text-xl border-2 border-amber-300 rounded-lg p-2" type="number">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">脚数</label>
+        <input value="${state.s1_f}" oninput="state.s1_f=this.value" class="w-20 text-center text-xl border-2 border-amber-300 rounded-lg p-2" type="number">
+      </div>
+      <button onclick="checkS1(${heads}, ${feet})" class="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg">检查</button>
+    </div>
+    ${fbHTML}
+    <div class="flex justify-center gap-1">${dots}</div>
+  </div>`;
+}
+
+function checkS1(heads, feet) {
+  if (parseInt(state.s1_h) === heads && parseInt(state.s1_f) === feet) {
+    state.s1_fb = 'correct';
+    render();
+    setTimeout(() => {
+      if (state.s1_idx === state.s1_rounds.length - 1) next();
+      else { state.s1_idx++; state.s1_h = ''; state.s1_f = ''; state.s1_fb = null; render(); }
+    }, 1100);
+  } else {
+    state.s1_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s1_fb = null; render(); }, 1400);
+  }
+}
+
+function stage2() {
+  const k = state.s2_k;
+  const chickens = 3, rabbits = 2;
+  const totalHeads = chickens + rabbits;
+  const totalFeet = chickens * 2 + rabbits * 4;
+  const lifted = chickens * Math.min(k, 2) + rabbits * Math.min(k, 4);
+  const remaining = totalFeet - lifted;
+  const insight = k === 2
+    ? `<div class="bg-yellow-100 border-2 border-yellow-400 rounded-xl p-4 flex gap-3 stage-enter">
+         <div class="text-yellow-600 flex-shrink-0">${ICONS.lightbulb}</div>
+         <p class="text-yellow-900 text-sm">🎉 神奇！每只鸡都"坐下"了（0 条腿），每只兔子还剩 2 条。地上剩余腿数 = <strong>2 × 兔子数</strong>！</p>
+       </div>` : '';
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-amber-900 text-center">第二关 · 抬腿魔法</h2>
+    <p class="text-center text-amber-700 text-sm">让所有动物同时抬起 <strong>K</strong> 条腿，看看会发生什么？</p>
+    <div class="bg-green-50 rounded-2xl p-5 border-2 border-green-200">
+      <div class="flex justify-center flex-wrap gap-2 mb-4 min-h-20">
+        ${repeat(chickens, () => animalHTML('chicken', Math.min(k, 2)))}
+        ${repeat(rabbits, () => animalHTML('rabbit', Math.min(k, 4)))}
+      </div>
+      <div class="flex justify-around text-center text-sm flex-wrap gap-2">
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">头</div><div class="text-lg font-bold text-amber-700">${totalHeads}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">原脚</div><div class="text-lg font-bold text-amber-700">${totalFeet}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">抬起</div><div class="text-lg font-bold text-blue-600">${lifted}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">地上剩</div><div class="text-lg font-bold text-green-600">${remaining}</div></div>
+      </div>
+    </div>
+    <div class="px-2">
+      <label class="text-sm text-amber-700 flex justify-between mb-1">
+        <span>每只动物抬起 K = <strong>${k}</strong> 条腿</span>
+      </label>
+      <input type="range" min="0" max="4" step="1" value="${k}" oninput="setState({s2_k: Number(this.value)})" class="w-full accent-amber-500">
+    </div>
+    ${insight}
+    <div class="text-center">
+      <button onclick="next()" ${k !== 2 ? 'disabled' : ''} class="px-8 py-3 bg-amber-500 hover:bg-amber-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-full shadow">
+        ${k === 2 ? '我懂了，下一关 →' : '试试 K=2 看看魔法'}
+      </button>
+    </div>
+  </div>`;
+}
+
+function stage3() {
+  const k = state.s3_k;
+  const animals = state.s3_animals;
+  const totalHeads = 5;
+  const totalFeet = 14;
+  const lifted = animals.reduce((s, a) => s + Math.min(k, a.type === 'chicken' ? 2 : 4), 0);
+  const remaining = totalFeet - lifted;
+
+  let insight = '';
+  if (k === 2 && !state.s3_revealed) {
+    insight = `<div class="bg-yellow-100 border-2 border-yellow-400 rounded-xl p-3 text-yellow-900 text-sm stage-enter">
+      💡 地上剩 ${remaining} 只脚，只有兔子还站着（每只剩 2 条腿）→ 兔子数 = ${remaining} ÷ 2
+    </div>`;
+  }
+  let fb = '';
+  if (state.s3_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold">✅ 正确！揭开真相...</div>`;
+  else if (state.s3_fb === 'wrong') fb = `<div class="text-center text-red-500 font-bold">❌ 试试 K=2 的魔法</div>`;
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-amber-900 text-center">第三关 · 隐身侦探</h2>
+    <p class="text-center text-amber-700 text-sm">动物身份被遮住了，看不出哪只是鸡哪只是兔！<br>已知：<strong>5 个头, 14 只脚</strong>，用抬腿魔法找出兔子数量。</p>
+    <div class="bg-slate-100 rounded-2xl p-5 border-2 border-slate-300">
+      <div class="flex justify-center flex-wrap gap-3 mb-4 min-h-24 items-end">
+        ${animals.map(a => animalHTML(a.type, Math.min(k, a.type === 'chicken' ? 2 : 4), !state.s3_revealed)).join('')}
+      </div>
+      <div class="flex justify-around text-center text-sm flex-wrap gap-2">
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">头</div><div class="text-lg font-bold">${totalHeads}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">原脚</div><div class="text-lg font-bold">${totalFeet}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">抬起</div><div class="text-lg font-bold text-blue-600">${lifted}</div></div>
+        <div class="bg-white rounded-lg px-3 py-2 shadow"><div class="text-xs text-gray-500">地上剩</div><div class="text-lg font-bold text-green-600">${remaining}</div></div>
+      </div>
+    </div>
+    <div class="px-2">
+      <label class="text-sm text-amber-700">每只抬起 K = <strong>${k}</strong> 条腿</label>
+      <input type="range" min="0" max="2" step="1" value="${k}" oninput="setState({s3_k: Number(this.value)})" class="w-full accent-amber-500">
+    </div>
+    ${insight}
+    <div class="flex justify-center items-center gap-3 flex-wrap">
+      <label class="text-amber-700">兔子有几只？</label>
+      <input type="number" value="${state.s3_guess}" oninput="state.s3_guess=this.value" class="w-20 text-center text-xl border-2 border-amber-300 rounded-lg p-2">
+      <button onclick="checkS3()" class="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg">提交</button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS3() {
+  if (parseInt(state.s3_guess) === 2) {
+    state.s3_fb = 'correct';
+    state.s3_revealed = true;
+    render();
+    setTimeout(() => next(), 2400);
+  } else {
+    state.s3_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s3_fb = null; render(); }, 1500);
+  }
+}
+
+function stage4() {
+  const targetH = 10, targetF = 28;
+  const c = state.s4_c;
+  const r = targetH - c;
+  const curF = c * 2 + r * 4;
+  const match = curF === targetF;
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-amber-900 text-center">第四关 · 滑动调整</h2>
+    <p class="text-center text-amber-700 text-sm">题目：共有 <strong>10 个头, 28 只脚</strong>。<br>拖动滑块让脚数正好等于 28！</p>
+    <div class="bg-green-50 rounded-2xl p-4 border-2 border-green-200 min-h-32">
+      <div class="flex justify-center flex-wrap gap-1">
+        ${repeat(c, () => animalHTML('chicken'))}
+        ${repeat(r, () => animalHTML('rabbit'))}
+      </div>
+    </div>
+    <div class="px-2">
+      <label class="text-sm text-amber-700 flex justify-between mb-1">
+        <span>🐔 鸡：<strong>${c}</strong></span>
+        <span>🐰 兔：<strong>${r}</strong></span>
+      </label>
+      <input type="range" min="0" max="${targetH}" value="${c}" oninput="setState({s4_c: Number(this.value)})" class="w-full accent-amber-500">
+    </div>
+    <div class="flex justify-center gap-3 flex-wrap">
+      <div class="rounded-lg px-4 py-2 shadow transition-colors ${match ? 'bg-green-200' : 'bg-white'}">
+        <div class="text-xs text-gray-500">当前脚数</div>
+        <div class="text-2xl font-bold">${curF}</div>
+      </div>
+      <div class="rounded-lg px-4 py-2 bg-amber-100 shadow">
+        <div class="text-xs text-gray-500">目标脚数</div>
+        <div class="text-2xl font-bold">${targetF}</div>
+      </div>
+    </div>
+    ${match
+      ? `<div class="text-center space-y-2 scale-in">
+           <div class="text-2xl">🎉 完美匹配！</div>
+           <p class="text-amber-800 text-sm">${c} 只鸡 + ${r} 只兔 = ${targetH} 头, ${targetF} 脚</p>
+           <button onclick="next()" class="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow">下一关 →</button>
+         </div>`
+      : `<p class="text-center text-amber-600 text-sm">${curF < targetF ? '↗️ 脚不够，多加点兔子？' : '↘️ 脚太多，多加点鸡？'}</p>`
+    }
+  </div>`;
+}
+
+function stage5() {
+  const heads = 20, feet = 56;
+  let fb = '';
+  if (state.s5_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold">✅ 太棒了！</div>`;
+  else if (state.s5_fb === 'wrong') fb = `<div class="text-center text-red-500 font-bold">❌ 再想想，可以打开提示</div>`;
+
+  const hintHTML = state.s5_hint ? `<div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 text-sm text-yellow-900 space-y-1 slide-down">
+    <p><strong>抬腿法：</strong>每只动物抬起 2 条腿。</p>
+    <p>抬起总脚数 = 2 × ${heads} = ${2 * heads}</p>
+    <p>地上剩余 = ${feet} − ${2 * heads} = <strong>${feet - 2 * heads}</strong></p>
+    <p>剩下都是兔子的腿（每只兔子还剩 2 条）→ 兔子数 = ${feet - 2 * heads} ÷ 2 = <strong>${(feet - 2 * heads) / 2}</strong></p>
+    <p>鸡数 = ${heads} − 兔子数</p>
+  </div>` : '';
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-amber-900 text-center">第五关 · 列式破题</h2>
+    <p class="text-center text-amber-700">题目：共有 <strong>20 个头, 56 只脚</strong>。鸡和兔各几只？</p>
+    <button onclick="setState({s5_hint: !state.s5_hint})" class="mx-auto flex items-center gap-2 px-4 py-2 bg-yellow-100 border border-yellow-300 rounded-lg text-yellow-800 text-sm hover:bg-yellow-200">
+      ${ICONS.lightbulb} ${state.s5_hint ? '隐藏提示' : '查看提示'}
+    </button>
+    ${hintHTML}
+    <div class="flex justify-center gap-3 flex-wrap items-end">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">🐔 鸡</label>
+        <input value="${state.s5_c}" oninput="state.s5_c=this.value" type="number" class="w-20 text-center text-xl border-2 border-amber-300 rounded-lg p-2">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">🐰 兔</label>
+        <input value="${state.s5_r}" oninput="state.s5_r=this.value" type="number" class="w-20 text-center text-xl border-2 border-amber-300 rounded-lg p-2">
+      </div>
+      <button onclick="checkS5()" class="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg">提交</button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS5() {
+  if (parseInt(state.s5_c) === 12 && parseInt(state.s5_r) === 8) {
+    state.s5_fb = 'correct';
+    render();
+    setTimeout(next, 1700);
+  } else {
+    state.s5_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s5_fb = null; render(); }, 1500);
+  }
+}
+
+function stage6() {
+  const totalV = 12, totalW = 34;
+  let fb = '';
+  if (state.s6_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold">✅ 你已掌握"换汤不换药"的迁移技巧！</div>`;
+  else if (state.s6_fb === 'wrong') fb = `<div class="text-center text-red-500 font-bold">❌ 再思考一下，套用同样的方法</div>`;
+
+  const hintHTML = state.s6_hint ? `<div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 text-sm text-yellow-900 space-y-1 slide-down">
+    <p><strong>类比：</strong>自行车 ↔ 鸡（2 轮/腿），汽车 ↔ 兔（4 轮/腿）。</p>
+    <p>"抬轮法"：每辆车都抬起 2 个轮子 → 抬起 ${2 * totalV} 个</p>
+    <p>地上剩余 = ${totalW} − ${2 * totalV} = <strong>${totalW - 2 * totalV}</strong>（都是汽车的）</p>
+    <p>汽车数 = ${totalW - 2 * totalV} ÷ 2 = <strong>${(totalW - 2 * totalV) / 2}</strong></p>
+  </div>` : '';
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-sky-900 text-center">第六关 · 停车场之谜 🅿️</h2>
+    <div class="bg-sky-50 rounded-2xl p-4 border-2 border-sky-200">
+      <p class="text-sky-900 text-sm">
+        小区停车场里有 <strong>自行车 🚲</strong> 和 <strong>汽车 🚗</strong>。
+        管理员数了数：共 <strong class="text-red-600">${totalV}</strong> 辆车，
+        一共 <strong class="text-red-600">${totalW}</strong> 个轮子。
+      </p>
+      <p class="text-sky-700 text-xs mt-2">💡 这和"鸡兔同笼"是同一类问题吗？想想：自行车 2 轮、汽车 4 轮…</p>
+    </div>
+    <div class="bg-gray-100 rounded-2xl p-4 border-2 border-gray-300 min-h-24 flex flex-wrap justify-center items-end gap-1">
+      ${repeat(7, () => vehicleHTML('bike'))}
+      ${repeat(5, () => vehicleHTML('car'))}
+      <p class="w-full text-center text-xs text-gray-500 mt-2">（这只是一个示意，请你算一算正确答案）</p>
+    </div>
+    <button onclick="setState({s6_hint: !state.s6_hint})" class="mx-auto flex items-center gap-2 px-4 py-2 bg-yellow-100 border border-yellow-300 rounded-lg text-yellow-800 text-sm hover:bg-yellow-200">
+      ${ICONS.lightbulb} ${state.s6_hint ? '隐藏提示' : '迁移提示'}
+    </button>
+    ${hintHTML}
+    <div class="flex justify-center gap-3 flex-wrap items-end">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-sky-700 mb-1">🚲 自行车</label>
+        <input value="${state.s6_b}" oninput="state.s6_b=this.value" type="number" class="w-20 text-center text-xl border-2 border-sky-300 rounded-lg p-2">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-sky-700 mb-1">🚗 汽车</label>
+        <input value="${state.s6_c}" oninput="state.s6_c=this.value" type="number" class="w-20 text-center text-xl border-2 border-sky-300 rounded-lg p-2">
+      </div>
+      <button onclick="checkS6()" class="px-6 py-2 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-lg">提交</button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS6() {
+  if (parseInt(state.s6_b) === 7 && parseInt(state.s6_c) === 5) {
+    state.s6_fb = 'correct';
+    render();
+    setTimeout(next, 1700);
+  } else {
+    state.s6_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s6_fb = null; render(); }, 1500);
+  }
+}
+
+function stage7() {
+  const totalV = 8, totalW = 27;
+  let fb = '';
+  if (state.s7_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold">✅ 你掌握了更通用的假设法！</div>`;
+  else if (state.s7_fb === 'wrong') fb = `<div class="text-center text-red-500 font-bold">❌ 试试上面的"实验台"</div>`;
+
+  let assumeHTML = '';
+  if (state.s7_assume === 'tri') {
+    assumeHTML = `<div class="bg-white rounded-lg p-3 text-sm text-gray-800 space-y-1">
+      <div class="flex flex-wrap justify-center gap-1 mb-2">${repeat(totalV, () => vehicleHTML('tri'))}</div>
+      <p>假设全是三轮车：${totalV} × 3 = <strong>${totalV*3}</strong> 个轮子</p>
+      <p>实际有 ${totalW} 个，少了 <strong>${totalW - totalV*3}</strong> 个。</p>
+      <p>每把一辆三轮车换成汽车，多 1 个轮子。</p>
+      <p>所以汽车数 = ${totalW - totalV*3} ÷ 1 = <strong class="text-violet-700">${totalW - totalV*3}</strong></p>
+    </div>`;
+  } else if (state.s7_assume === 'car') {
+    assumeHTML = `<div class="bg-white rounded-lg p-3 text-sm text-gray-800 space-y-1">
+      <div class="flex flex-wrap justify-center gap-1 mb-2">${repeat(totalV, () => vehicleHTML('car'))}</div>
+      <p>假设全是汽车：${totalV} × 4 = <strong>${totalV*4}</strong> 个轮子</p>
+      <p>实际有 ${totalW} 个，多了 <strong>${totalV*4 - totalW}</strong> 个。</p>
+      <p>每把一辆汽车换成三轮车，少 1 个轮子。</p>
+      <p>所以三轮车数 = ${totalV*4 - totalW} ÷ 1 = <strong class="text-violet-700">${totalV*4 - totalW}</strong></p>
+    </div>`;
+  }
+
+  const hintHTML = state.s7_hint ? `<div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 text-sm text-yellow-900 slide-down">
+    <p>📌 <strong>核心思想没变</strong>：先"统一"成一种车，再用"差额"反推少数派的数量。</p>
+    <p>这就是<strong>假设法</strong>，比抬腿法更通用——不管是 (2,4)、(3,4) 还是 (5,8)，都能用！</p>
+  </div>` : '';
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-violet-900 text-center">第七关 · 三轮新挑战 🛺</h2>
+    <div class="bg-violet-50 rounded-2xl p-4 border-2 border-violet-200">
+      <p class="text-violet-900 text-sm">
+        小镇集市上停着 <strong>三轮车 🛺</strong>（3 个轮子）和 <strong>汽车 🚗</strong>（4 个轮子）。
+        共 <strong class="text-red-600">${totalV}</strong> 辆，
+        <strong class="text-red-600">${totalW}</strong> 个轮子。
+      </p>
+      <p class="text-violet-700 text-xs mt-2">⚠️ 注意：这次不再是 2 和 4！抬腿法还能直接套用吗？试试新思路——<strong>假设法</strong>。</p>
+    </div>
+    <div class="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200">
+      <p class="text-sm text-gray-700 text-center mb-2">🧪 实验台：假设全部是同一种车</p>
+      <div class="flex justify-center gap-2 mb-3">
+        <button onclick="setState({s7_assume:'tri'})" class="px-3 py-1 text-sm rounded-lg border-2 ${state.s7_assume==='tri'?'bg-violet-500 text-white border-violet-600':'bg-white border-gray-300'}">全是三轮车</button>
+        <button onclick="setState({s7_assume:'car'})" class="px-3 py-1 text-sm rounded-lg border-2 ${state.s7_assume==='car'?'bg-violet-500 text-white border-violet-600':'bg-white border-gray-300'}">全是汽车</button>
+      </div>
+      ${assumeHTML}
+    </div>
+    <button onclick="setState({s7_hint: !state.s7_hint})" class="mx-auto flex items-center gap-2 px-4 py-2 bg-yellow-100 border border-yellow-300 rounded-lg text-yellow-800 text-sm hover:bg-yellow-200">
+      ${ICONS.lightbulb} ${state.s7_hint ? '隐藏总结' : '方法总结'}
+    </button>
+    ${hintHTML}
+    <div class="flex justify-center gap-3 flex-wrap items-end">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-violet-700 mb-1">🛺 三轮车</label>
+        <input value="${state.s7_t}" oninput="state.s7_t=this.value" type="number" class="w-20 text-center text-xl border-2 border-violet-300 rounded-lg p-2">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-violet-700 mb-1">🚗 汽车</label>
+        <input value="${state.s7_c}" oninput="state.s7_c=this.value" type="number" class="w-20 text-center text-xl border-2 border-violet-300 rounded-lg p-2">
+      </div>
+      <button onclick="checkS7()" class="px-6 py-2 bg-violet-500 hover:bg-violet-600 text-white font-bold rounded-lg">提交</button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS7() {
+  if (parseInt(state.s7_t) === 5 && parseInt(state.s7_c) === 3) {
+    state.s7_fb = 'correct';
+    render();
+    setTimeout(next, 1700);
+  } else {
+    state.s7_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s7_fb = null; render(); }, 1500);
+  }
+}
+
+function stage8() {
+  const totalV = 10, totalW = 30, knownBikes = 2;
+  const remainV = totalV - knownBikes;
+  const remainW = totalW - knownBikes * 2;
+  let fb = '';
+  if (state.s8_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold">✅ 多变量问题被你"降维打击"了！</div>`;
+  else if (state.s8_fb === 'wrong') fb = `<div class="text-center text-red-500 font-bold">❌ 跟着引导一步步算</div>`;
+
+  let step1HTML = '', step2HTML = '';
+  if (state.s8_step >= 1) {
+    step1HTML = `<div class="bg-white rounded-lg p-3 text-sm space-y-1 stage-enter">
+      <p>剥离后：剩 <strong>${remainV}</strong> 辆车，<strong>${remainW}</strong> 个轮子</p>
+      <p>问题简化为：三轮车 + 汽车 = ${remainV}，3×三轮 + 4×汽车 = ${remainW}</p>
+      <p class="text-rose-700">🎯 这就是第七关的题型！</p>
+      <button onclick="setState({s8_step: Math.max(state.s8_step, 2)})" class="mt-2 text-xs px-3 py-1 bg-rose-100 hover:bg-rose-200 rounded-lg text-rose-700">
+        ${state.s8_step >= 2 ? '✓ 用假设法解' : '继续：用假设法'}
+      </button>
+    </div>`;
+  }
+  if (state.s8_step >= 2) {
+    step2HTML = `<div class="bg-white rounded-lg p-3 text-sm space-y-1 stage-enter">
+      <p>假设全是三轮车：${remainV} × 3 = ${remainV*3} 轮，比实际少 ${remainW - remainV*3} 个。</p>
+      <p>每换一辆汽车多 1 轮 → 汽车 = <strong>${remainW - remainV*3}</strong>，三轮车 = <strong>${remainV - (remainW - remainV*3)}</strong></p>
+    </div>`;
+  }
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-rose-900 text-center">第八关 · 三种车的派对 🎉</h2>
+    <div class="bg-rose-50 rounded-2xl p-4 border-2 border-rose-200">
+      <p class="text-rose-900 text-sm">
+        快递站门口停着 <strong>自行车 🚲</strong>(2 轮)、<strong>三轮车 🛺</strong>(3 轮)、<strong>汽车 🚗</strong>(4 轮) 三种车。
+      </p>
+      <p class="text-rose-900 text-sm mt-1">
+        共 <strong class="text-red-600">${totalV}</strong> 辆，<strong class="text-red-600">${totalW}</strong> 个轮子。
+        已知<strong>自行车有 ${knownBikes} 辆</strong>，求三轮车和汽车各几辆？
+      </p>
+      <p class="text-rose-700 text-xs mt-2">🧠 三个未知数？别慌——把已知的"剥离"出去，问题就降维了！</p>
+    </div>
+    <div class="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200 space-y-3">
+      <div class="flex items-center gap-2 text-sm font-bold text-rose-800">
+        <span class="bg-rose-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">1</span>
+        先把 ${knownBikes} 辆自行车拿出去
+      </div>
+      <button onclick="setState({s8_step: Math.max(state.s8_step, 1)})" class="text-xs px-3 py-1 bg-rose-100 hover:bg-rose-200 rounded-lg text-rose-700">
+        ${state.s8_step >= 1 ? '✓ 已剥离' : '点击剥离'}
+      </button>
+      ${step1HTML}
+      ${step2HTML}
+    </div>
+    <div class="flex justify-center gap-3 flex-wrap items-end">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-rose-700 mb-1">🛺 三轮车</label>
+        <input value="${state.s8_t}" oninput="state.s8_t=this.value" type="number" class="w-20 text-center text-xl border-2 border-rose-300 rounded-lg p-2">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-rose-700 mb-1">🚗 汽车</label>
+        <input value="${state.s8_c}" oninput="state.s8_c=this.value" type="number" class="w-20 text-center text-xl border-2 border-rose-300 rounded-lg p-2">
+      </div>
+      <button onclick="checkS8()" class="px-6 py-2 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-lg">提交</button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS8() {
+  if (parseInt(state.s8_t) === 6 && parseInt(state.s8_c) === 2) {
+    state.s8_fb = 'correct';
+    render();
+    setTimeout(next, 1900);
+  } else {
+    state.s8_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s8_fb = null; render(); }, 1500);
+  }
+}
+
+function stage9() {
+  let fb = '';
+  if (state.s9_fb === 'correct') fb = `<div class="text-center text-green-600 font-bold text-xl scale-in">🏆 千古难题已被你破解！</div>`;
+  else if (state.s9_fb === 'wrong') {
+    fb = `<div class="text-center text-red-500 text-sm">再试一次！${state.s9_tries >= 2 ? '<span class="text-amber-600 block mt-1">提示：(94 − 2×35) ÷ 2 = 兔子数</span>' : ''}</div>`;
+  } else if (state.s9_fb === 'empty') {
+    fb = `<div class="text-center text-amber-600 text-sm">请先填写鸡和兔的数量～</div>`;
+  }
+
+  return `<div class="space-y-4">
+    <h2 class="text-2xl font-bold text-amber-900 text-center flex items-center justify-center gap-2">
+      <span class="text-yellow-500">${ICONS.sparkles}</span> 终极挑战 <span class="text-yellow-500">${ICONS.sparkles}</span>
+    </h2>
+    <div class="bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl p-5 border-2 border-amber-300">
+      <p class="text-center text-amber-900 italic mb-2">"今有雉兔同笼"</p>
+      <p class="text-center text-amber-900 text-lg">
+        上有 <strong class="text-2xl text-red-600">35</strong> 头，
+        下有 <strong class="text-2xl text-red-600">94</strong> 足
+      </p>
+      <p class="text-center text-amber-700 text-sm mt-1">问雉兔各几何？</p>
+    </div>
+    <div class="flex justify-center gap-3 flex-wrap items-end">
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">🐔 雉(鸡)</label>
+        <input value="${state.s9_c}" oninput="state.s9_c=this.value" type="number" ${state.s9_locked?'disabled':''} class="w-24 text-center text-2xl border-2 border-amber-300 rounded-lg p-2 disabled:bg-gray-100">
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="text-sm text-amber-700 mb-1">🐰 兔</label>
+        <input value="${state.s9_r}" oninput="state.s9_r=this.value" type="number" ${state.s9_locked?'disabled':''} class="w-24 text-center text-2xl border-2 border-amber-300 rounded-lg p-2 disabled:bg-gray-100">
+      </div>
+    </div>
+    <div class="text-center">
+      <button onclick="checkS9()" ${state.s9_locked?'disabled':''} class="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-white font-bold rounded-full shadow-lg">
+        破解答案
+      </button>
+    </div>
+    ${fb}
+  </div>`;
+}
+
+function checkS9() {
+  if (state.s9_locked) return;
+  const cn = parseInt(state.s9_c, 10);
+  const rn = parseInt(state.s9_r, 10);
+  if (Number.isNaN(cn) || Number.isNaN(rn)) {
+    state.s9_fb = 'empty';
+    render();
+    setTimeout(() => { state.s9_fb = null; render(); }, 1500);
+    return;
+  }
+  state.s9_tries++;
+  if (cn === 23 && rn === 12) {
+    state.s9_fb = 'correct';
+    state.s9_locked = true;
+    render();
+    setTimeout(() => next(), 1800);
+  } else {
+    state.s9_fb = 'wrong';
+    render();
+    setTimeout(() => { state.s9_fb = null; render(); }, 1500);
+  }
+}
+
+function stage10() {
+  const stars = repeat(5, () => `<span>${ICONS.star}</span>`);
+  return `<div class="text-center space-y-5 py-6">
+    <div class="text-7xl spin-in">🏆</div>
+    <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">恭喜全通关！</h1>
+    <div class="flex justify-center gap-1">${stars}</div>
+    <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-200 text-amber-900 text-left space-y-2">
+      <p class="font-bold">🎓 你已掌握的"迁移地图"：</p>
+      <ul class="text-sm space-y-1">
+        <li>✅ 鸡兔同笼（2,4）— 抬腿法的图形理解</li>
+        <li>✅ 自行车 & 汽车（2,4）— 同公式跨情境</li>
+        <li>✅ 三轮车 & 汽车（3,4）— 假设法适配新数字</li>
+        <li>✅ 三种交通工具（2,3,4）— 多元降维</li>
+        <li>✅ 《孙子算经》千古名题</li>
+      </ul>
+      <p class="text-xs text-amber-700 mt-3">💡 关键不在记公式，而在抓住"统一假设 → 看差额 → 反推少数派"这个万能思路。</p>
+    </div>
+    <button onclick="restart()" class="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow flex items-center gap-2 mx-auto">
+      ${ICONS.rotate} 再玩一次
+    </button>
+  </div>`;
+}
+
+// ============ Render ============
+function render() {
+  // Preserve focus state for inputs
+  const active = document.activeElement;
+  const activeInfo = active && active.tagName === 'INPUT' ? {
+    type: active.type,
+    selStart: active.selectionStart,
+    selEnd: active.selectionEnd,
+    value: active.value,
+    // We use position-based key: tag + type + index
+    onInputAttr: active.getAttribute('oninput')
+  } : null;
+
+  // Progress bar
+  const progressEl = document.getElementById('progress');
+  if (state.stage > 0 && state.stage < state.totalStages) {
+    progressEl.classList.remove('hidden');
+    document.getElementById('progressText').textContent = `关卡 ${state.stage} / ${state.totalStages - 1}`;
+    document.getElementById('progressName').textContent = STAGE_NAMES[state.stage];
+    document.getElementById('progressBar').style.width = `${(state.stage / (state.totalStages - 1)) * 100}%`;
+  } else {
+    progressEl.classList.add('hidden');
+  }
+
+  const container = document.getElementById('stageContainer');
+  const stages = [stage0, stage1, stage2, stage3, stage4, stage5, stage6, stage7, stage8, stage9, stage10];
+  container.innerHTML = `<div class="stage-enter" key="${state.stage}">${stages[state.stage]()}</div>`;
+
+  // Restore focus
+  if (activeInfo) {
+    const inputs = container.querySelectorAll('input');
+    for (const inp of inputs) {
+      if (inp.getAttribute('oninput') === activeInfo.onInputAttr) {
+        inp.focus();
+        try {
+          if (activeInfo.selStart !== null && inp.type !== 'range') {
+            inp.setSelectionRange(activeInfo.selStart, activeInfo.selEnd);
+          }
+        } catch(e) {}
+        break;
+      }
+    }
+  }
+}
+
+render();
+</script>
+</body>
+</html>
