@@ -7,9 +7,9 @@ redirect_from:
   - /about.html
 ---
 
-I am a third-year Ph.D. candidate in Computer Science and Engineering at the Hong Kong University of Science and Technology (HKUST), supervised by Prof. S. C. Cheung, Chair Professor of Computer Science and Engineering, ACM Distinguished Member, and IEEE Fellow. I received my B.Sc. in Computer Science with an Additional Major in Mathematics from HKUST, graduating with First Class Honors, and was awarded the 2023 Academic Achievement Medal. My research focuses on software engineering, particularly the automated testing of visualization systems. More broadly, I am interested in integrating theory, algorithms, and software practice to improve software quality and reliability. I also enjoy exploring artificial intelligence and mathematics. Beyond research, I enjoy natural scenery photography, listening to pop music, playing acoustic guitar, solving algorithmic problems on LeetCode and Codeforces, and playing sandbox games such as Minecraft, Don’t Starve, and Dyson Sphere Program.
+I am a third-year Ph.D. candidate at [Hong Kong University of Science and Technology](https://hkust.edu.hk/) (HKUST) in [CASTLE Lab](https://castlelab.github.io/), supervised by [Prof. S. C. Cheung](https://www.cse.ust.hk/~scc/) (IEEE Fellow, Chair Professor). I received my B.Sc. in Computer Science and Mathematics from HKUST. My research focuses on software engineering, particularly the automated testing of visualization systems. More broadly, I am interested in integrating theory, algorithms, and software practice to improve software quality and reliability. I also enjoy exploring artificial intelligence and mathematics.
 
-
+Beyond research, I enjoy natural scenery photography, listening to pop music, playing acoustic guitar, solving algorithmic problems on LeetCode and Codeforces, and playing sandbox games such as Minecraft, Don’t Starve, and Dyson Sphere Program.
 
 ## Background
 
