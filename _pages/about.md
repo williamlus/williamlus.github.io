@@ -7,7 +7,9 @@ redirect_from:
   - /about.html
 ---
 
-I am a third-year Ph.D. candidate at [Hong Kong University of Science and Technology](https://hkust.edu.hk/) (HKUST) in [CASTLE Lab](https://castlelab.github.io/), supervised by [Prof. S. C. Cheung](https://www.cse.ust.hk/~scc/) (IEEE Fellow, Chair Professor). I received my B.Sc. in Computer Science and Mathematics from HKUST. My research focuses on software engineering, particularly the automated testing of visualization systems. More broadly, I am interested in integrating theory, algorithms, and software practice to improve software quality and reliability. I also enjoy exploring artificial intelligence and mathematics.
+I am a third-year Ph.D. candidate at [The Hong Kong University of Science and Technology](https://hkust.edu.hk/) (HKUST) in [CASTLE Lab](https://castlelab.github.io/), supervised by [Prof. S. C. Cheung](https://www.cse.ust.hk/~scc/) (IEEE Fellow, Chair Professor), supported by the [Hong Kong PhD Fellowship Scheme (HKPFS)](https://cerg1.ugc.edu.hk/hkpfs/index.html). I received my B.Sc. in Computer Science and Mathematics from HKUST.
+
+My research focuses on software engineering, particularly the automated testing of visualization systems. More broadly, I am interested in integrating theory, algorithms, and software practice to improve software quality and reliability. I also enjoy exploring artificial intelligence and mathematics.
 
 Beyond research, I enjoy natural scenery photography, listening to pop music, playing acoustic guitar, solving algorithmic problems on LeetCode and Codeforces, and playing sandbox games such as Minecraft, Don’t Starve, and Dyson Sphere Program.
 
