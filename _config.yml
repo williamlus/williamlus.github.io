@@ -8,8 +8,8 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
-title                    : "Weiqi Lu / Home" # Update this with the title of your site
+site_theme               : "air" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
+title                    : "Homepage" # Update this with the title of your site
 title_separator          : "-"
 name                     : &name "Weiqi Lu" # Update this with your name, this is the default if not overridden by a page
 description              : &description "Weiqi Lu's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
@@ -25,10 +25,10 @@ author:
   # Biographic information
   avatar           : "profile.png"
   name             : "Weiqi Lu" # Update this with your name, this is the default if not overridden by a page
-  pronouns         : "he/him"
-  bio              : "PhD candidate in Computer Science and Engineering at HKUST, interested in software engineering, artificial intelligence, algorithms, and mathematics."
+  pronouns         : # Update this with your pronouns, this is the default if not overridden by a page
+  bio              : "PhD candidate in Computer Science and Engineering at Hong Kong University of Science and Technology"
   location         : "Hong Kong, China"
-  employer         : "Hong Kong University of Science and Technology"
+  employer         : "HKUST"
   uri              : # URL
   email            : "wluak@connect.ust.hk" 
 
