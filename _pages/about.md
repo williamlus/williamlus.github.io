@@ -70,4 +70,4 @@ GPA: 4.00/4.00
 - COMP5111 Fundamentals of Software Testing and Analysis (2024-25 Spring, 2025-26 Spring)
 - COMP2211 Exploring Artificial Intelligence (2023-24 Spring)
 - Peer review for ICSE 2026, ISSTA 2026, ASE 2026, FSE 2026, ISSTA 2025, and ASE 2025
-- Active contribution to the open-source software community through automated testing of data visualization libraries, including [matplotlib](https://matplotlib.org/), [bokeh](https://bokeh.org/), and [plotly](https://plotly.com/)
+- Active contribution to the maintenance of open-source data visualization libraries, including [matplotlib](https://matplotlib.org/), [bokeh](https://bokeh.org/), and [plotly](https://plotly.com/)
