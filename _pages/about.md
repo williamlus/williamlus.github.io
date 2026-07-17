@@ -30,7 +30,7 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 - **Ph.D. in Computer Science and Engineering** | 2023.09 – Present  
   *GPA: 4.050/4.30*
 
-- **B.Sc. in Computer Science and Mathematics (Double Major)** | 2019.09 – 2023.07  
+- **B.Sc. in Computer Science and Mathematics** | 2019.09 – 2023.07  
   *First Class Honors · GPA: 4.109/4.30*  
   *2023 Academic Achievement Medal · Top 2–3%*
 
