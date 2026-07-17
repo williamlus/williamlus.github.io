@@ -76,4 +76,5 @@ Teaching and Service
 
 Service and leadership
 ======
+* Active testing of open-source data visualization libraries, including [matplotlib](https://matplotlib.org/), [bokeh](https://bokeh.org/), and [plotly](https://plotly.com/)
 * Currently serving as a reviewer for major software engineering venues
