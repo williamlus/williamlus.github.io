@@ -27,8 +27,9 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 
 | Period | Degree & Institution |
 | :--- | :--- |
-| **2023.09 – Present** | **Ph.D. in Computer Science and Engineering**<br>The Hong Kong University of Science and Technology |
-| **2019.09 – 2023.07** | **B.Sc. in Computer Science & Mathematics (Double Major)**<br>The Hong Kong University of Science and Technology<br>*First Class Honors* |
+| **2023.09 – Present** | **Ph.D. in Computer Science and Engineering**<br>The Hong Kong University of Science and Technology<br>*GPA: 4.050/4.30* |
+| **2019.09 – 2023.07** | **B.Sc. in Computer Science & Mathematics (Double Major)**<br>The Hong Kong University of Science and Technology<br>*First Class Honors (GPA: 4.109/4.30)* |
+| **2022.01 – 2022.05** | **Undergraduate Exchange Program**<br>Georgia Institute of Technology<br>*GPA: 4.00/4.00* |
 
 ## Honors and Awards
 
