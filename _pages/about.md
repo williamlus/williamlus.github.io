@@ -25,6 +25,11 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 
 ## Education
 
+| Period | Degree & Institution |
+| :--- | :--- |
+| **2023.09 – Present** | **Ph.D. in Computer Science and Engineering**<br>The Hong Kong University of Science and Technology |
+| **2019.09 – 2023.07** | **B.Sc. in Computer Science & Mathematics (Double Major)**<br>The Hong Kong University of Science and Technology<br>*First Class Honors* |
+
 ## Honors and Awards
 
 ## Teaching and Service
