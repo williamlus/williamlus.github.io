@@ -7,7 +7,7 @@ excerpt: 'A study examining the current capability boundary of ChatGPT as a prog
 date: 2023-04-23
 venue: 'arXiv preprint arXiv:2304.11938'
 paperurl: 'https://arxiv.org/abs/2304.11938'
-citation: 'Tian, H., Lu, W., Li, T. O., Tang, X., Cheung, S.-C., Klein, J., and Bissyande, T. F. (2023). &quot;Is ChatGPT the Ultimate Programming Assistant--How Far Is It?&quot; <i>arXiv preprint arXiv:2304.11938</i>.'
+citation: 'Haoye Tian, Weiqi Lu, Tsz On Li, Xunzhu Tang, Shing-Chi Cheung, Jacques Klein, and Tegawendé F. Bissyandé. 2023. Is ChatGPT the Ultimate Programming Assistant--How Far Is It? arXiv preprint arXiv:2304.11938.'
 ---
 
 This paper studies how far large language models can reliably support programming tasks, and where the practical limitations still remain.
