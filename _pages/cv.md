@@ -74,8 +74,4 @@ Teaching and Service
 * COMP5111 Fundamentals of Software Testing and Analysis (2024-25 Spring, 2025-26 Spring)
 * COMP2211 Exploring Artificial Intelligence (2023-24 Spring)
 * Peer review for ICSE 2026, ISSTA 2026, ASE 2026, FSE 2026, ISSTA 2025, and ASE 2025
-
-Service and leadership
-======
 * Active testing of open-source data visualization libraries, including [matplotlib](https://matplotlib.org/), [bokeh](https://bokeh.org/), and [plotly](https://plotly.com/)
-* Currently serving as a reviewer for major software engineering venues
