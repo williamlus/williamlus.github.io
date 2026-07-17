@@ -32,6 +32,7 @@ The Hong Kong University of Science and Technology
 **B.Sc. in Computer Science and Mathematics (Double Major)** (2019.09 – 2023.07)  
 The Hong Kong University of Science and Technology  
 *First Class Honors (GPA: 4.109/4.30)*
+*2023 Academic Achievement Medal (top 2-3%)*
 
 **Undergraduate Exchange Program** (2022.01 – 2022.05)  
 Georgia Institute of Technology  
