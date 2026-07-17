@@ -25,12 +25,9 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 
 ## Projects
 
-* **Automated Testing of Data Visualization Libraries** (2023 – Present) | [arXiv](https://arxiv.org/abs/2607.12363)
-Supervisors: [Shing-Chi CHEUNG](https://www.cse.ust.hk/~scc/), [Yongqiang Tian](https://yqtian.com/)
-* **Language-Guided Dense Prediction for Scene Understanding** | [UROP Proceedings 2022-23](https://ebookshelf.ust.hk/flippingbook/G23142/138/)
-Supervisor: [Dan XU](https://www.danxurgb.net/)
-* **Knowledge Discovery over Database** | [UROP Proceedings 2021-22](https://ebookshelf.ust.hk/flippingbook/G22866/138/)
-Supervisor: [Raymond Chi Wing WONG](https://www.cse.ust.hk/~raywong/)
+* **Automated Testing of Data Visualization Libraries** (2023 – Present) | [arXiv](https://arxiv.org/abs/2607.12363) | Supervisors: [Shing-Chi CHEUNG](https://www.cse.ust.hk/~scc/), [Yongqiang Tian](https://yqtian.com/)
+* **Language-Guided Dense Prediction for Scene Understanding** (2022 - 2023) | [UROP Proceedings 2022-23](https://ebookshelf.ust.hk/flippingbook/G23142/138/) | Supervisor: [Dan XU](https://www.danxurgb.net/)
+* **Knowledge Discovery over Database** (2021 - 2022) | [UROP Proceedings 2021-22](https://ebookshelf.ust.hk/flippingbook/G22866/138/) | Supervisor: [Raymond Chi Wing WONG](https://www.cse.ust.hk/~raywong/)
 
 ## Education
 
