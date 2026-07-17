@@ -60,3 +60,4 @@ GPA: 4.00/4.00
 
 - **COMP5111 Fundamentals of Software Testing and Analysis** | 2024-25 Spring, 2025-26 Spring
 - **COMP2211 (L1-L3) Exploring Artificial Intelligence** | 2023-24 Spring
+- Review for ICSE 2026, ISSTA 2026, ASE 2026, FSE 2026, ISSTA 2025, and ASE 2025
