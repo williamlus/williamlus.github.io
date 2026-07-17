@@ -7,7 +7,7 @@ excerpt: 'An empirical analysis of bug characteristics and failure patterns in d
 date: 2025-06-01
 venue: 'Proceedings of the ACM on Software Engineering'
 paperurl: 'https://dl.acm.org/doi/10.1145/3729363'
-citation: 'Lu, W., Tian, Y., Zhong, X., Ma, H., Xu, Z., Cheung, S.-C., and Sun, C. (2025). &quot;An Empirical Study of Bugs in Data Visualization Libraries.&quot; <i>Proceedings of the ACM on Software Engineering</i>, 2(FSE), 2075-2098.'
+citation: 'Weiqi Lu, Yongqiang Tian, Xiaohan Zhong, Haoyang Ma, Zhenyang Xu, Shing-Chi Cheung, and Chengnian Sun. 2025. An Empirical Study of Bugs in Data Visualization Libraries. Proc. ACM Softw. Eng. 2, FSE, Article FSE093 (July 2025), 24 pages. https://doi.org/10.1145/3729363'
 ---
 
 This work presents an empirical investigation of bugs in data visualization libraries and reports observations that can guide testing and quality assurance practices.
