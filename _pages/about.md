@@ -13,6 +13,12 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 
 ## Publications
 
+{% include base_path %}
+{% assign recent_pubs = site.publications | sort: "date" | reverse %}
+{% for post in recent_pubs limit: 5 %}
+  {% include archive-single.html %}
+{% endfor %}
+
 ## Education
 
 ## Honors and Awards
