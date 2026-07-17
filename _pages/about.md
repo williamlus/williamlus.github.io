@@ -26,14 +26,18 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 ## Education
 
 ### The Hong Kong University of Science and Technology
+
 - **Ph.D. in Computer Science and Engineering** | 2023.09 – Present  
   *GPA: 4.050/4.30*
+
 - **B.Sc. in Computer Science and Mathematics** | 2019.09 – 2023.07  
   *First Class Honors · GPA: 4.109/4.30*  
   *2023 Academic Achievement Medal · Top 2–3%*
+
 ### Georgia Institute of Technology
 **Undergraduate Exchange Program** | 2022.01 – 2022.05  
 *GPA: 4.00/4.00*
+
 ### University of California, Berkeley
 **Berkeley Summer Sessions** | 2021.06 – 2021.08  
 *GPA: 4.00/4.00*
