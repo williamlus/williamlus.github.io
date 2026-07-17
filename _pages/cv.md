@@ -16,10 +16,9 @@ Education
 * 2023.09 - Present: Ph.D. in Computer Science and Engineering, The Hong Kong University of Science and Technology
   * GPA: 4.050/4.30
 * 2019.09 - 2023.07: B.Sc. in Computer Science and Mathematics, The Hong Kong University of Science and Technology
-  * First Class Honors
   * GPA: 4.109/4.30
-  * 2023 Academic Achievement Medal
-  * Top 2–3%
+  * First Class Honors
+  * 2023 Academic Achievement Medal (Top 2–3%)
 * 2022.01 - 2022.05: Undergraduate Exchange Program, Georgia Institute of Technology
   * GPA: 4.00/4.00
 * 2021.06 - 2021.08: Berkeley Summer Sessions, University of California, Berkeley
