@@ -30,12 +30,10 @@ Projects
   * [arXiv](https://arxiv.org/abs/2607.12363)
   * Supervisors: [Shing-Chi Cheung](https://www.cse.ust.hk/~scc/), [Yongqiang Tian](https://yqtian.com/)
 * Language-Guided Dense Prediction for Scene Understanding, 2022 - 2023
-  * UROP Proceedings 2022-23
-  * [Project link](https://ebookshelf.ust.hk/flippingbook/G23142/138/)
+  * [UROP Proceedings 2022-23](https://ebookshelf.ust.hk/flippingbook/G23142/138/)
   * Supervisor: [Dan Xu](https://www.danxurgb.net/)
 * Knowledge Discovery over Database, 2021 - 2022
-  * UROP Proceedings 2021-22
-  * [Project link](https://ebookshelf.ust.hk/flippingbook/G22866/138/)
+  * [UROP Proceedings 2021-22](https://ebookshelf.ust.hk/flippingbook/G22866/138/)
   * Supervisor: [Raymond Chi Wing Wong](https://www.cse.ust.hk/~raywong/)
 
 Honors and Awards
