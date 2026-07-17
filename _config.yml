@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "en-US"
 site_theme               : "contrast" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
-title                    : "Homepage" # Update this with the title of your site
+title                    : "Weiqi Lu" # Update this with the title of your site
 title_separator          : "-"
 name                     : &name "Weiqi Lu" # Update this with your name, this is the default if not overridden by a page
 description              : &description "Weiqi Lu's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
@@ -24,7 +24,7 @@ repository               : "williamlus/williamlus.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Weiqi Lu" # Update this with your name, this is the default if not overridden by a page
+  name             : "Weiqi Lu (卢伟奇)" # Update this with your name, this is the default if not overridden by a page
   pronouns         : # Update this with your pronouns, this is the default if not overridden by a page
   bio              : "PhD Candidate in Computer Science & Engineering @ HKUST"
   location         : "Hong Kong, China"
