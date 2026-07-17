@@ -37,6 +37,10 @@ The Hong Kong University of Science and Technology
 Georgia Institute of Technology  
 *GPA: 4.00/4.00*
 
+**Summer Exchange Program** (2021.06 – 2021.08)  
+University of California, Berkeley  
+*GPA: 4.00/4.00*
+
 ## Honors and Awards
 
 ## Teaching and Service
