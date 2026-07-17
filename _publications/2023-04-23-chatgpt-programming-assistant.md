@@ -2,7 +2,7 @@
 title: "Is ChatGPT the Ultimate Programming Assistant--How Far Is It?"
 collection: publications
 category: manuscripts
-permalink: /publication/2023-04-23-chatgpt-programming-assistant
+permalink: https://arxiv.org/abs/2304.11938
 excerpt: 'A study examining the current capability boundary of ChatGPT as a programming assistant.'
 date: 2023-04-23
 venue: 'arXiv preprint arXiv:2304.11938'

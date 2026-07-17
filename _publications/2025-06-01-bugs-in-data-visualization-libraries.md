@@ -2,7 +2,7 @@
 title: "An Empirical Study of Bugs in Data Visualization Libraries"
 collection: publications
 category: conferences
-permalink: /publication/2025-06-01-bugs-in-data-visualization-libraries
+permalink: https://dl.acm.org/doi/10.1145/3729363
 excerpt: 'An empirical analysis of bug characteristics and failure patterns in data visualization libraries.'
 date: 2025-06-01
 venue: 'Proceedings of the ACM on Software Engineering'
