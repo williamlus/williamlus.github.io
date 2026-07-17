@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Weiqi Lu (卢伟奇)"
+title: "About"
 author_profile: true
 redirect_from: 
   - /about/
