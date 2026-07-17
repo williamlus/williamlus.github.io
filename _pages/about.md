@@ -45,4 +45,15 @@ GPA: 4.00/4.00
 
 ## Honors and Awards
 
+- ACM SIGSOFT CAPS Award (2025)
+- Hong Kong PhD Fellowship Award (2023 - 2027)
+- HKUST RedBird PhD Award (2023)
+- Hong Kong University of Science and Technology Academic Achievement Medal (2023)
+- The 17th Epsilon Fund Honorable Mention Award (2022)
+- Tin Ka Ping Scholarship (Exchange) (2022)
+- HKUST Alumni Endowment Fund High Flyers Program Scholarship (2022)
+- Chiaphua Industries Limited Scholarship for Chinese Mainland Undergraduate Students (2020 - 2023)
+- University's Scholarship Scheme for Continuing Undergraduate Students (2020 - 2023)
+- Dean’s List for the School of Engineering (2019 - 2023)
+
 ## Teaching and Service
