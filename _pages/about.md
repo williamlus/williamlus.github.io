@@ -23,6 +23,14 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
 {% endfor %}
 </ul>
 
+## Projects
+
+- Automated Testing of Data Visualization Libraries | [arXiv](https://arxiv.org/abs/2607.12363)
+- Language-Guided Dense Prediction for Scene Understanding | UROP Proceedings 2022-23 | [Link](https://ebookshelf.ust.hk/flippingbook/G23142/138/)  
+  Supervisor: [XU, Dan](https://www.danxurgb.net/) / CSE
+- Knowledge Discovery over Database | UROP Proceedings 2021-22 | [Link](https://ebookshelf.ust.hk/flippingbook/G22866/138/)  
+  Supervisor: [WONG Raymond Chi Wing](https://www.cse.ust.hk/~raywong/) / CSE
+
 ## Education
 
 ### The Hong Kong University of Science and Technology
