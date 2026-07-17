@@ -56,6 +56,7 @@ Publications
   <ul>{% for post in site.publications reversed %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
+
 <!-- Talks
 ======
   <ul>{% for post in site.talks reversed %}
@@ -67,6 +68,7 @@ Teaching
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
   -->
+
 Teaching and Service
 ======
 * COMP5111 Fundamentals of Software Testing and Analysis (2024-25 Spring, 2025-26 Spring)
