@@ -28,9 +28,9 @@ Education
 
 Programming Languages
 ======
-* Algorithms & Applications: C++ (STL, data structures and algorithms, Qt, networked game development), Java (JavaFX, Soot-based program analysis and instrumentation)
-* Scientific Computing, ML & Automation: Python (NumPy, PyTorch, Pandas, static & dynamic program analysis, test automation for visualization libraries), R (statistics and machine learning), Shell/Bash (workflow automation)
-* Data & Web: SQL, JavaScript/HTML5 (Chart.js and Plotly.js analysis/testing, DOM-based testing)
+* Algorithms & Applications: **C++** (STL, data structures and algorithms, Qt, networked game development), **Java** (JavaFX, Soot-based program analysis and instrumentation)
+* Scientific Computing, ML & Automation: **Python** (NumPy, PyTorch, Pandas, static & dynamic program analysis, test automation for visualization libraries), **R** (statistics and machine learning), **Shell/Bash** (workflow automation)
+* Data & Web: **SQL**, **JavaScript/HTML5** (Chart.js and Plotly.js analysis/testing, DOM-based testing)
 
 Projects
 ======
