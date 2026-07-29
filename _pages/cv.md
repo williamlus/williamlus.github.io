@@ -26,13 +26,13 @@ Education
 * 2021.06 - 2021.08: Berkeley Summer Sessions, University of California, Berkeley
   * GPA: 4.00/4.00
 
-Programming Languages
+Technical Skills
 ======
 * Algorithms & Applications: **C++** (STL, data structures and algorithms, Qt, networked game development), **Java** (JavaFX, Soot-based program analysis and instrumentation)
 * Scientific Computing, ML & Automation: **Python** (NumPy, PyTorch, Pandas, static & dynamic program analysis, test automation for visualization libraries), **R** (statistics and machine learning), **Shell/Bash** (workflow automation)
 * Data & Web: **SQL**, **JavaScript/HTML5** (Chart.js and Plotly.js analysis/testing, DOM-based testing)
 
-Projects
+Research Experience
 ======
 * Automated Testing of Data Visualization Libraries, 2023 - Present
   * [arXiv](https://arxiv.org/abs/2607.12363)
