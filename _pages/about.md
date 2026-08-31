@@ -54,6 +54,7 @@ GPA: 4.00/4.00
 
 ## Honors and Awards
 
+-  \#10 at HKUST, Hong Kong Joint Collegiate Programming Contest (HKJCPC 2026).
 - ACM SIGSOFT CAPS Award (2025)
 - Hong Kong PhD Fellowship Award (2023 - 2027)
 - HKUST RedBird PhD Award (2023)
