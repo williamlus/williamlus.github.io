@@ -29,7 +29,7 @@ Beyond research, I enjoy [solving algorithmic problems](https://leetcode.com/u/l
   Supervisors: [Shing-Chi CHEUNG](https://www.cse.ust.hk/~scc/), [Yongqiang Tian](https://yqtian.com/)
 * **Language-Guided Dense Prediction for Scene Understanding** (2022 - 2023) | [UROP Proceedings 2022-23](https://ebookshelf.ust.hk/flippingbook/G23142/138/)  
   Supervisor: [Dan XU](https://www.danxurgb.net/)
-* **Uncovering Causal Relationships in Co-location Patterns** (2021 - 2022) | [UROP Proceedings 2021-22](https://ebookshelf.ust.hk/flippingbook/G22866/138/) | [Short Paper](https://dl.acm.org/doi/abs/10.1145/3589132.3628373)
+* **Uncovering Causal Relationships in Co-location Patterns** (2021 - 2022) | [UROP Proceedings 2021-22](https://ebookshelf.ust.hk/flippingbook/G22866/138/), [Short Paper](https://dl.acm.org/doi/abs/10.1145/3589132.3628373)
   Supervisor: [Raymond Chi Wing WONG](https://www.cse.ust.hk/~raywong/)
 
 ## Education
