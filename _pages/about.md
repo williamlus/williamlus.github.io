@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-I am Weiqi (William) Lu, a third-year Ph.D. candidate in [CASTLE Lab](https://castlelab.github.io/) at [The Hong Kong University of Science and Technology](https://hkust.edu.hk/) (HKUST), supervised by [Prof. S. C. Cheung](https://www.cse.ust.hk/~scc/) (IEEE Fellow, Chair Professor) and supported by the [Hong Kong PhD Fellowship Scheme (HKPFS)](https://cerg1.ugc.edu.hk/hkpfs/index.html). Prior to this, I earned my B.Sc. in Computer Science and Mathematics at HKUST.
+I am Weiqi (William) Lu, a fourth-year Ph.D. candidate in [CASTLE Lab](https://castlelab.github.io/) at [The Hong Kong University of Science and Technology](https://hkust.edu.hk/) (HKUST), supervised by [Prof. S. C. Cheung](https://www.cse.ust.hk/~scc/) (IEEE Fellow, Chair Professor) and [Prof. Yongqiang Tian](https://yqtian.com/) (Monash University), and supported by the [Hong Kong PhD Fellowship Scheme (HKPFS)](https://cerg1.ugc.edu.hk/hkpfs/index.html). Prior to this, I earned my B.Sc. in Computer Science and Mathematics at HKUST.
 
 My research focuses on **software engineering**, particularly the **automated testing of graphics systems**. I am interested in combining mathematical modeling, theory and algorithms, and engineering practice to improve software quality and reliability. Additionally, I enjoy exploring mathematics and machine learning, with a specific interest in artificial intelligence for software engineering (**AI4SE**) and large language models for software engineering (**LLM4SE**).
 
